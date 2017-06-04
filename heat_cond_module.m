@@ -8,26 +8,26 @@
 % Output: 
 %   Cell-averaged temperature
 function [T_j]=heat_cond_module(Tau,J,T_L,T_R,pTriplePrime_j,p_MMS_j)
-%   %% Example also as optional param
-%   if ~exist('Tau','var')
-%     Tau=10;
-%   end
-%   if ~exist('J','var')
-%     J=5*2;%*2*2*2*2*2*2*2*2
-%   end
-%   if ~exist('T_L','var')
-%     T_L=0;
-%   end
-%   if ~exist('T_R','var')
-%     T_R=100;
-%   end
-%   if ~exist('pTriplePrime','var')
-%     pTriplePrime_j=ones(J,1)*0.2; %kappa=1, sigma_f=0.1; phi=2.0
-%   end
-%   if ~exist('p_MMS_j','var')
-%     p_MMS_j=ones(J,1)*2.2;
-%   end
-% 
+  %% Example also as optional param
+  if ~exist('Tau','var')
+    Tau=10;
+  end
+  if ~exist('J','var')
+    J=5;%*2;%*2*2*2*2*2*2*2*2
+  end
+  if ~exist('T_L','var')
+    T_L=0;
+  end
+  if ~exist('T_R','var')
+    T_R=100;
+  end
+  if ~exist('pTriplePrime','var')
+    pTriplePrime_j=ones(J,1)*0.2; %kappa=1, sigma_f=0.1; phi=2.0
+  end
+  if ~exist('p_MMS_j','var')
+    p_MMS_j=ones(J,1)*2.2;
+  end
+
 %% Solver
   delta_z_j=ones(J,1)*Tau/J;
   delta_z=Tau/J; % Assuming uniform grid
