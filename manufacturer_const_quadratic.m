@@ -2,8 +2,8 @@
     % Discretized analytical solution
     % Manufactured boundary conditions
     % Manufactured source
-function [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
-          T_j_ana,T_L,T_R,p_MMS_j]=manufacturer_const_quadratic(J,N,Tau,mat)
+function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
+          T_MMS_j,T_L,T_R,q_MMS_j]=manufacturer_const_quadratic(J,N,Tau,mat)
   % input parameters
   if ~exist('J','var')
     J=5*2;%*2%*2*2*2*2*2*2*2*2
@@ -24,39 +24,68 @@ function [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     mat = struct(field1,value1,field2,value2,field3,value3,... 
       field4,value4,field5,value5);
   end
+
   % Material
   Sig_ss_j=mat.Sig_ss_j;
   nuSig_f_j=mat.nuSig_f_j;
+  Sig_f_j=mat.Sig_f_j;
   Sig_t_j=mat.Sig_t_j;
+  k_F=mat.thermal_cond_k_j(1);
+  % random placement of a variable here
+  kappa=1.0;
+
+  h=Tau/J;
+  [mu_n,weight_n]=lgwt(N,-1,1); mu_n=flipud(mu_n);
   
+  %% For MoC MMS solution and problem  
   % Everything below is determined by the analytical solution
   % In this case, it's the constant angular flux and quadratic temp.
   
-  % Discretized analytical solution
-  phi0_j_ana=zeros(J,1);
-  for j=1:J
-    phi0_j_ana(j)=2.0;
-  end
-  % Boundary Condition
-  psi_b1_n=ones(N,1)*1.0; % n=N/2+1:N % mu>0
-  psi_b2_n=ones(N,1)*1.0; % n=1:N/2 % mu<0
-  % MMS source
-  Q_MMS_j_n=ones(J,N)*0.3; % isotropic external source, angular quan.
+  % Assumed manufactured solution \psi(x,\mu)=1.0, 0<x<Tau
+  % Define function handle for angular flux, phi assumed to be 2*psi
+  psi_MMS =@(x) 1.0;
+  
+  % Boundary condition and source
+  % psi expression evaluated at x=0
+  psi_b1_n=psi_MMS(0)*ones(N,1); % n=N/2+1:N % mu>0
+  % psi expression evaluated at x=Tau
+  psi_b2_n=psi_MMS(Tau)*ones(N,1); % n=1:N/2 % mu<0
 
+  Q_MMS_j_n=zeros(J,N); % preallocate memory, avg'ed over tau_(j-1/2) and tau_(j+1/2)
+  % MMS source: mu_n * derivative(psi_MMS) ...
+  % + (Sig_t-Sig_ss-nuSig_f)* psi_MMS
+  
+  phi0_MMS_j=zeros(J,1);
+  for j=1:J
+%     x_L=(j-1)*h;x_R=j*h;
+    phi0_MMS_j(j)=2.0;
+    for n=1:N
+    Q_MMS_j_n(j,n)=(Sig_t_j(j)-Sig_ss_j(j)-nuSig_f_j(j))*1.0;
+    end % n
+  end % j
+  
   %% For TH MMS solution and problem
-  % Discretized analytical solution
-  T_j_ana=zeros(J,1);
-  h_j=ones(J,1)*Tau/J;
-  for j=1:J
-    T_j_ana(j)=(j*j+j*(j-1)+(j-1)*(j-1))*h_j(j)*h_j(j)/3;
-  end
-  % Boundary Condition
-  T_L=0;
-  T_R=100;
+  % Assumed manufactured solution T(x)=x.^2, 0<x<Tau
+  T_MMS =@(x) x.^2;
+  T_MMS_xx = @(x) 2.0;
+  
+  % Boundadry condition and source
+  % Left boundary, T_MMS evaluated at x=0;
+  T_L=T_MMS(0);
+  % Right boundary, T_MMS evaluated at x=Tau;
+  T_R=T_MMS(Tau);
+  
+  % Discretized MMS solution
+  T_MMS_j=zeros(J,1);
+  T_MMS_xx_j=zeros(J,1);
+  
   % MMS source
-  p_MMS_j=zeros(J,1);
+  q_MMS_j=zeros(J,1);
   for j=1:J
-    p_MMS_j(j)=2.2;
+    x_L=(j-1)*h;x_R=j*h;
+    T_MMS_j(j)=1/h*integral(T_MMS,x_L,x_R);
+    T_MMS_xx_j(j)=2.0;
+    q_MMS_j(j)=k_F*T_MMS_xx_j(j)+kappa*Sig_f_j(j)*phi0_MMS_j(j);
   end
 
 end
