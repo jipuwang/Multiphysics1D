@@ -7,13 +7,13 @@
 %   Boundary condition
 % Output: 
 %   Cell-averaged temperature
-function [T_j]=heat_cond_module(Tau,J,T_L,T_R,pTriplePrime_j,p_MMS_j)
+function [T_j]=heat_cond_module(J,Tau,T_L,T_R,pTriplePrime_j,p_MMS_j)
   %% Example also as optional param
-  if ~exist('Tau','var')
-    Tau=10;
-  end
   if ~exist('J','var')
     J=5;%*2;%*2*2*2*2*2*2*2*2
+  end
+  if ~exist('Tau','var')
+    Tau=10;
   end
   if ~exist('T_L','var')
     T_L=0;
