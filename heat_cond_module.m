@@ -7,7 +7,7 @@
 %   Boundary condition
 % Output: 
 %   Cell-averaged temperature
-function [T_j]=heat_cond_module(J,Tau,T_L,T_R,pTriplePrime_j,p_MMS_j)
+function [T_j]=heat_cond_module(J,Tau,mat,T_L,T_R,pTriplePrime_j,p_MMS_j)
   %% Example also as optional param
   if ~exist('J','var')
     J=5;%*2;%*2*2*2*2*2*2*2*2
@@ -15,13 +15,18 @@ function [T_j]=heat_cond_module(J,Tau,T_L,T_R,pTriplePrime_j,p_MMS_j)
   if ~exist('Tau','var')
     Tau=10;
   end
+  if ~exist('mat','var')
+    % Material
+    field1 = 'thermal_cond_k_j';  value1 = ones(J,1);
+    mat = struct(field1,value1);
+  end
   if ~exist('T_L','var')
     T_L=0;
   end
   if ~exist('T_R','var')
     T_R=100;
   end
-  if ~exist('pTriplePrime','var')
+  if ~exist('pTriplePrime_j','var')
     pTriplePrime_j=ones(J,1)*0.2; %kappa=1, sigma_f=0.1; phi=2.0
   end
   if ~exist('p_MMS_j','var')
@@ -49,6 +54,9 @@ function [T_j]=heat_cond_module(J,Tau,T_L,T_R,pTriplePrime_j,p_MMS_j)
   for j=1:J
     f(j)=-pTriplePrime_j(j)+p_MMS_j(j);
   end
+  k_inv=1/mat.thermal_cond_k_j(1);
+  f=f*k_inv; 
+  
   f(1)=f(1)-2*T_L/(delta_z_j(1)*delta_z_j(1));
   f(J)=f(J)-2*T_R/(delta_z_j(J)*delta_z_j(J));
 
