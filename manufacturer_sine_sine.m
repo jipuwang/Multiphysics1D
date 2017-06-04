@@ -70,9 +70,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     end % n
   end % j
 
-
   %% For TH MMS solution and problem
-  
   % Assumed manfuactured solution T(x)=sin(pi*x/Tau), 0<x<Tau
   T_MMS =@(x) sin(pi*x/Tau);
   T_MMS_xx =@(x) -(pi*pi/Tau/Tau)*sin(pi*x/Tau);
@@ -83,7 +81,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   % Right boundary, T_MMS evaluated at x=Tau;
   T_R=T_MMS(Tau);
   
-  % Discretized analytical solution
+  % Discretized MMS solution
   T_MMS_j=zeros(J,1);
   T_MMS_xx_j=zeros(J,1);
 
@@ -94,8 +92,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     T_MMS_j(j)=1/h*integral(T_MMS,x_L,x_R);
     T_MMS_xx_j(j)=1/h*integral(T_MMS_xx,x_L,x_R);
     q_MMS_j(j)=k_F*T_MMS_xx_j(j)+kappa*Sig_f_j(j)*phi0_MMS_j(j);
-  end
-  
+  end  
 
 end
 
