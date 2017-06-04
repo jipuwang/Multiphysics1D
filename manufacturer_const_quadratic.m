@@ -3,17 +3,24 @@
     % Manufactured boundary conditions
     % Manufactured source
 function [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
-          T_j_ana,T_L,T_R,p_MMS_j]=manufacturer_const_quadratic(Tau,mat,J,N)
-%   % input parameters
-%   if ~exist('Tau','var')
-%     Tau=10;
-%   end
-%   if ~exist('J','var')
-%     J=5*2;%*2%*2*2*2*2*2*2*2*2
-%   end
-%   if ~exist('N','var')
-%     N=16;
-%   end
+          T_j_ana,T_L,T_R,p_MMS_j]=manufacturer_const_quadratic(J,N,Tau,mat)
+  % input parameters
+  if ~exist('J','var')
+    J=5*2;%*2%*2*2*2*2*2*2*2*2
+  end
+  if ~exist('N','var')
+    N=16;
+  end
+  if ~exist('Tau','var')
+    Tau=10;
+  end
+  if ~exist('mat','var')
+    % Material
+    field1 = 'Sig_ss_j';  value1 = ones(J,1)*0.5;
+    field2 = 'nuSig_f_j';  value2 = ones(J,1)*0.2;
+    field3 = 'Sig_t_j';  value3 = ones(J,1);
+    mat = struct(field1,value1,field2,value2,field3,value3);
+  end
 
   % Material
   Sig_ss_j=mat.Sig_ss_j;
