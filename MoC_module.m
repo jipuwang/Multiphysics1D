@@ -12,34 +12,32 @@
 function [phi0_j]=MoC_module(Tau,mat,J,N,...
            psi_b1_n,psi_b2_n,Q_MMS_j_n)
 
-%   % Input parameter
-%   if ~exist('Tau','var')
-%     Tau=10;
-%   end
-%   if ~exist('J','var')
-%     J=5*2;%*2%*2*2*2*2*2*2*2*2
-%   end
-%   if ~exist('N','var')
-%     N=16;
-%   end
-%   if ~exist('Sig_t_j','var')
-%     Sig_t_j=ones(J,1);
-%   end
-%   if ~exist('Sig_ss_j','var')
-%     Sig_ss_j=ones(J,1)*0.5;
-%   end
-%   if ~exist('nuSig_f_j','var')
-%     nuSig_f_j=ones(J,1)*0.2;
-%   end
-%   if ~exist('psi_b1_n','var')
-%     psi_b1_n=ones(N,1)*1.0;
-%   end
-%   if ~exist('psi_b2_n','var')
-%     psi_b2_n=ones(N,1)*1.0;
-%   end
-%   if ~exist('Q_j_n','var')
-%     Q_j_n=ones(J,N)*0.3; % removed *2.0 (angular quantity)
-%   end
+%   Input parameter
+  if ~exist('Tau','var')
+    Tau=10;
+  end
+  if ~exist('J','var')
+    J=5*2;%*2%*2*2*2*2*2*2*2*2
+  end
+  if ~exist('N','var')
+    N=16;
+  end
+  if ~exist('mat','var')
+    % Material
+    field1 = 'Sig_ss_j';  value1 = ones(J,1)*0.5;
+    field2 = 'nuSig_f_j';  value2 = ones(J,1)*0.2;
+    field3 = 'Sig_t_j';  value3 = ones(J,1);
+    mat = struct(field1,value1,field2,value2,field3,value3);
+  end
+  if ~exist('psi_b1_n','var')
+    psi_b1_n=ones(N,1)*1.0;
+  end
+  if ~exist('psi_b2_n','var')
+    psi_b2_n=ones(N,1)*1.0;
+  end
+  if ~exist('Q_MMS_j_n','var')
+    Q_MMS_j_n=ones(J,N)*0.3; % removed *2.0 (angular quantity)
+  end
   
   % Material
   Sig_ss_j=mat.Sig_ss_j;
@@ -71,7 +69,9 @@ function [phi0_j]=MoC_module(Tau,mat,J,N,...
   q_j_n=zeros(J,N);
   for iIterate=1:maxIterate
     for j=1:J
-      q_j_n(j,:)=(Sig_ss_j(j)+nuSig_f_j(j))*phi0_j_old(j)*0.5+Q_MMS_j_n(j,n);
+      for n=1:N
+        q_j_n(j,n)=(Sig_ss_j(j)+nuSig_f_j(j))*phi0_j_old(j)*0.5+Q_MMS_j_n(j,n);
+      end
     end
     phi0_j_new=zeros(J,1);
     % ray tracing
