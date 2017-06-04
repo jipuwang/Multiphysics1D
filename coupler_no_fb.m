@@ -8,49 +8,56 @@
 
 % The name of the coupler should reveal the constant_quadratic case.
 
-function [phi0_j,T_j]=coupler_no_fb(Tau,mat,J,N,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
+function [phi0_j,T_j]=coupler_no_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
           T_L,T_R,p_MMS_j)
-%   % input parameters
-%   if ~exist('J','var')
-%     Tau=10;
-%   end
-%   if ~exist('J','var')
-%     J=5*2;%*2%*2*2*2*2*2*2*2*2
-%   end
-%   if ~exist('N','var')
-%     N=16;
-%   end
-%   if ~exist('psi_b1_n','var')
-%     psi_b1_n=ones(N,1)*1.0; % the first/negative half is not useful; n=N/2+1:N % mu>0
-%   end
-%   if ~exist('psi_b2_n','var')
-%     psi_b2_n=ones(N,1)*1.0; % the second/positive half is not useful; n=1:N/2 % mu<0
-%   end
-%   if ~exist('Q_MMS_j_n','var')
-%     Q_MMS_j_n=ones(J,N)*0.3; % isotropic external source, angular quan.
-%   end
-%   if ~exist('T_L','var')
-%     T_L=0;
-%   end
-%   if ~exist('T_R','var')
-%     T_R=100;
-%   end
-%   if ~exist('p_MMS_j','var')
-%     % define p_MMS_j
-%     p_MMS_j=zeros(J,1);
-%     for j=1:J
-%       p_MMS_j(j)=2.2;
-%     end
-%   end
+  % input parameters
+  if ~exist('J','var')
+    Tau=10;
+  end
+  if ~exist('N','var')
+    N=16;
+  end
+  if ~exist('Tau','var')
+    Tau=10;
+  end
+  if ~exist('mat','var')
+    % Material
+    field1 = 'Sig_ss_j';  value1 = ones(J,1)*0.5;
+    field2 = 'nuSig_f_j';  value2 = ones(J,1)*0.2;
+    field3 = 'Sig_t_j';  value3 = ones(J,1);
+    mat = struct(field1,value1,field2,value2,field3,value3);
+  end
+  if ~exist('psi_b1_n','var')
+    psi_b1_n=ones(N,1)*1.0; % the first/negative half is not useful; n=N/2+1:N % mu>0
+  end
+  if ~exist('psi_b2_n','var')
+    psi_b2_n=ones(N,1)*1.0; % the second/positive half is not useful; n=1:N/2 % mu<0
+  end
+  if ~exist('Q_MMS_j_n','var')
+    Q_MMS_j_n=ones(J,N)*0.3; % isotropic external source, angular quan.
+  end
+  if ~exist('T_L','var')
+    T_L=0;
+  end
+  if ~exist('T_R','var')
+    T_R=100;
+  end
+  if ~exist('p_MMS_j','var')
+    % define p_MMS_j
+    p_MMS_j=zeros(J,1);
+    for j=1:J
+      p_MMS_j(j)=2.2;
+    end
+  end
 
 %% Call the MoC module to get the flux
-  phi0_j=MoC_module(Tau,mat,J,N,...
+  phi0_j=MoC_module(J,N,Tau,mat,...
            psi_b1_n,psi_b2_n,Q_MMS_j_n);
 
 %% The coupling
   pTriplePrime_j=1*0.1*phi0_j; % kappa=1, sigma_f=0.1;
 
 %% Call the heat conduction module to get the temperature
-  T_j=heat_cond_module(Tau,J,T_L,T_R,pTriplePrime_j,p_MMS_j);
+  T_j=heat_cond_module(J,Tau,T_L,T_R,pTriplePrime_j,p_MMS_j);
 
 end
