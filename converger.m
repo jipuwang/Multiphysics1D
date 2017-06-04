@@ -11,19 +11,20 @@ nGrids=10;%8;
 
 % Geometry
 Tau=10; 
-% Material
-field1 = 'Sig_ss_j';  value1 = ones(J,1)*0.5;
-field2 = 'nuSig_f_j';  value2 = ones(J,1)*0.2;
-field3 = 'Sig_t_j';  value3 = ones(J,1);
-mat = struct(field1,value1,field2,value2,field3,value3);
 
-error_phi_n=ones(nGrids,1);
-error_T_n=ones(nGrids,1);
+error_phi_n=zeros(nGrids,1);
+error_T_n=zeros(nGrids,1);
 gridMeshSize_n=ones(nGrids,1);
 N=16; % angular discretization, fixed not refined. 
 for iGrid=1:nGrids
   J=5*2^iGrid;
   gridMeshSize_n(iGrid)=Tau/J;
+  
+  % Material
+  field1 = 'Sig_ss_j';  value1 = ones(J,1)*0.5;
+  field2 = 'nuSig_f_j';  value2 = ones(J,1)*0.2;
+  field3 = 'Sig_t_j';  value3 = ones(J,1);
+  mat = struct(field1,value1,field2,value2,field3,value3);
   
   % call the manufacturer to get MMS problem and solution
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
