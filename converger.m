@@ -1,3 +1,6 @@
+%% Instruction
+  % to run different cases, change the manufacturer only!
+%% Info
 % Grid refiner is for grid refinement analysis. 
 % Right now, it needs to be aware of the geometry and the material. So it
 % can call the manufacturer to get the MMS problem and solution
@@ -7,7 +10,7 @@
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
 
-nGrids=10;%8;
+nGrids=6;%10;%8;
 
 % Geometry
 Tau=10; 
@@ -21,14 +24,18 @@ for iGrid=1:nGrids
   gridMeshSize_n(iGrid)=Tau/J;
   
   % Material
-  field1 = 'Sig_ss_j';  value1 = ones(J,1)*0.5;
-  field2 = 'nuSig_f_j';  value2 = ones(J,1)*0.2;
-  field3 = 'Sig_t_j';  value3 = ones(J,1);
-  mat = struct(field1,value1,field2,value2,field3,value3);
+    field1 = 'Sig_ss_j';  value1 = ones(J,1)*0.5;
+    field2 = 'nuSig_f_j';  value2 = ones(J,1)*0.2;
+    field3 = 'Sig_t_j';  value3 = ones(J,1);
+    field4 = 'thermal_cond_k_j'; value4 = ones(J,1);
+    field5 = 'Sig_f_j'; value5 = ones(J,1)*0.1;
+    mat = struct(field1,value1,field2,value2,field3,value3,... 
+      field4,value4,field5,value5);
   
   % call the manufacturer to get MMS problem and solution
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
-          T_j_ana,T_L,T_R,p_MMS_j]=manufacturer_const_quadratic(J,N,Tau,mat);
+          T_j_ana,T_L,T_R,p_MMS_j]=manufacturer_sine_sine(J,N,Tau,mat);
+%           T_j_ana,T_L,T_R,p_MMS_j]=manufacturer_const_quadratic(J,N,Tau,mat);
   
   % call the coupler to solve the above manufactured problem
   [phi0_j,T_j]=coupler_no_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
@@ -37,6 +44,8 @@ for iGrid=1:nGrids
   % Calculate the error compared to manufactured solution
   error_phi_n(iGrid)=norm(phi0_j-phi0_j_ana,2)/sqrt(J);
   error_T_n(iGrid)=norm(T_j-T_j_ana,2)/sqrt(J);
+  figure(111);hold on; plot(T_j);
+
 end
 
 % Calculate the order of accuracy
@@ -52,14 +61,14 @@ error_phi_n
 error_T_n
 order_phi
 order_T
-  
+
 % Visualize the results
-figure(1)
+figure(11)
 loglog(gridMeshSize_n,error_phi_n,'-*');
 % title('scalar flux error convergence');
 xlabel('mesh size in mean free path');
 ylabel('2-norm error of scalar flux');
-figure(2)
+figure(12)
 loglog(gridMeshSize_n,error_T_n,'-*');
 % title('temperature error convergence');
 xlabel('mesh size in mean free path');
