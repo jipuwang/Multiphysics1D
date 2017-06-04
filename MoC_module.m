@@ -9,7 +9,7 @@
 % Output: 
 %   Cell-averaged scalar flux
 
-function [phi0_j]=MoC_module(Tau,mat,J,N,...
+function [phi0_j]=MoC_module(J,N,Tau,mat,...
            psi_b1_n,psi_b2_n,Q_MMS_j_n)
 
 %   Input parameter
