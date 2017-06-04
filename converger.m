@@ -28,10 +28,10 @@ for iGrid=1:nGrids
   
   % call the manufacturer to get MMS problem and solution
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
-          T_j_ana,T_L,T_R,p_MMS_j]=manufacturer_const_quadratic(Tau,mat,J,N);
+          T_j_ana,T_L,T_R,p_MMS_j]=manufacturer_const_quadratic(J,N,Tau,mat);
   
   % call the coupler to solve the above manufactured problem
-  [phi0_j,T_j]=coupler_no_fb(Tau,mat,J,N,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
+  [phi0_j,T_j]=coupler_no_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
           T_L,T_R,p_MMS_j);
 
   % Calculate the error compared to manufactured solution
