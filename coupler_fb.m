@@ -2,9 +2,9 @@
 % This is a coupler_with_fb, it does the following things:
 % 1. Solve for phi0_j with known source, e.g., MMS source.
 % 2. Build the fission heat source for TH problem.
-% 3. Solve for T_j with the above heat soruce (+ MMS soruce optionally). 
+% 3. Solve for T_j with the above heat soruce (+ MMS soruce optionally).
 % 4. Use T_j to update the xs
-% 5. Return to S1 until convergence in both phi0_j and T_j. 
+% 5. Return to S1 until convergence in both phi0_j and T_j.
 
 function [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
           T_L,T_R,p_MMS_j)
@@ -26,7 +26,7 @@ function [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     field4 = 'thermal_cond_k_j'; value4 = ones(J,1);
     field5 = 'Sig_f_j'; value5 = ones(J,1)*0.1;
     field6 = 'kappaSig_f_j'; value6 = ones(J,1)*0.1; % kappa=1.0;
-    mat = struct(field1,value1,field2,value2,field3,value3,... 
+    mat = struct(field1,value1,field2,value2,field3,value3,...
       field4,value4,field5,value5,field6,value6);
   end
   if ~exist('psi_b1_n','var')
@@ -51,7 +51,7 @@ function [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
       p_MMS_j(j)=2.2;
     end
   end
-  
+
   % Start the Picard Iteration
   T0=50;
   gamma=0.000;
@@ -74,32 +74,16 @@ function [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     T_j=heat_cond_module(J,Tau,mat,T_L,T_R,pTriplePrime_j,p_MMS_j);
     error_T=norm(T_j-T_j_old)/sqrt(J)
     T_j_old=T_j;
-    
+
     %% check convergence
-    if (error_phi<1e-12 && error_T<1e-12) 
+    if (error_phi<1e-12 && error_T<1e-12)
       isConverged=true;
       break;
     end
-    
+
     %% update cross section
     mat.Sig_t_j=mat.Sig_t_j+gamma*(T_j-T0); % gamma*(T_j_new-T0) is fb.
 
   end
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
