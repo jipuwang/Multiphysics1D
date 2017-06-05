@@ -36,9 +36,11 @@ for iGrid=1:nGrids
       field4,value4,field5,value5,field6,value6,field7,value7);
   
   % call the manufacturer to get MMS problem and solution
-  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
-          T_j_ana,T_L,T_R,p_MMS_j]=manufacturer_const_quadratic(J,N,Tau,mat);
-%           T_j_ana,T_L,T_R,p_MMS_j]=manufacturer_sine_sine(J,N,Tau,mat);
+  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,T_j_ana,T_L,T_R,p_MMS_j]=...
+    manufacturer_const_quadratic_fb(J,N,Tau,mat);
+%     manufacturer_const_quadratic(J,N,Tau,mat);
+%     manufacturer_sine_sine(J,N,Tau,mat);
+
   
   % call the coupler to solve the above manufactured problem
 %   [phi0_j,T_j]=coupler_no_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
