@@ -66,18 +66,18 @@ for iGrid=1:nGrids
 end
 
 % Calculate the order of accuracy
-order_phi=ones(nGrids-1,1);
-order_T=ones(nGrids-1,1);
+order_phi_nMinus1=ones(nGrids-1,1);
+order_T_nMinus1=ones(nGrids-1,1);
 for j=1:nGrids-1
-  order_phi(j)=log(error_phi0_n(j)/error_phi0_n(j+1))/log(gridMeshSize_n(j)/gridMeshSize_n(j+1));
-  order_T(j)=log(error_T_n(j)/error_T_n(j+1))/log(gridMeshSize_n(j)/gridMeshSize_n(j+1));
+  order_phi_nMinus1(j)=log(error_phi0_n(j)/error_phi0_n(j+1))/log(gridMeshSize_n(j)/gridMeshSize_n(j+1));
+  order_T_nMinus1(j)=log(error_T_n(j)/error_T_n(j+1))/log(gridMeshSize_n(j)/gridMeshSize_n(j+1));
 end
 
 % Display the result
 error_phi0_n
 error_T_n
-order_phi
-order_T
+order_phi_nMinus1
+order_T_nMinus1
 
 % Visualize the results
 orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
@@ -89,11 +89,12 @@ xlabel('mesh size [cm]');
 ylabel('scalar flux error RMS');
 
 hold on;
-errorstt=error_phi0_n(1);
-firstOrder=[errorstt errorstt/refinement^(nGrids-1)];
-secondOrder=[errorstt errorstt/refinement^(2*(nGrids-1))];
-thirdOrder=[errorstt errorstt/refinement^(3*(nGrids-1))];
-fourthOrder=[errorstt errorstt/refinement^(4*(nGrids-1))];
+orderGuess=round(order_phi_nMinus1(end));
+errorStt=error_phi0_n(end)*refinement^(orderGuess*(nGrids-1));
+firstOrder=[errorStt errorStt/refinement^(nGrids-1)];
+secondOrder=[errorStt errorStt/refinement^(2*(nGrids-1))];
+thirdOrder=[errorStt errorStt/refinement^(3*(nGrids-1))];
+fourthOrder=[errorStt errorStt/refinement^(4*(nGrids-1))];
 loglog(orderPlotGrid,firstOrder,'--');
 loglog(orderPlotGrid,secondOrder,'--');
 loglog(orderPlotGrid,thirdOrder,'--');
@@ -109,11 +110,12 @@ xlabel('mesh size [cm]');
 ylabel('temperature error RMS');
 
 hold on;
-errorstt=error_T_n(1);
-firstOrder=[errorstt errorstt/refinement^(nGrids-1)];
-secondOrder=[errorstt errorstt/refinement^(2*(nGrids-1))];
-thirdOrder=[errorstt errorstt/refinement^(3*(nGrids-1))];
-fourthOrder=[errorstt errorstt/refinement^(4*(nGrids-1))];
+orderGuess=round(order_T_nMinus1(end));
+errorStt=error_T_n(end)*refinement^(orderGuess*(nGrids-1));
+firstOrder=[errorStt errorStt/refinement^(nGrids-1)];
+secondOrder=[errorStt errorStt/refinement^(2*(nGrids-1))];
+thirdOrder=[errorStt errorStt/refinement^(3*(nGrids-1))];
+fourthOrder=[errorStt errorStt/refinement^(4*(nGrids-1))];
 loglog(orderPlotGrid,firstOrder,'--');
 loglog(orderPlotGrid,secondOrder,'--');
 loglog(orderPlotGrid,thirdOrder,'--');
