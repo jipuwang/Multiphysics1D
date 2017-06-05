@@ -60,6 +60,9 @@ function [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   T_j_old=zeros(J,1);
   phi0_j_old=zeros(1,J);
   isConverged=false;
+  % save the capture xs before the correction.
+  Sig_gamma_ref_j=mat.Sig_gamma_j;
+  Sig_t_ref_j=mat.Sig_t_j;
   while ~isConverged
     %% Call the MoC module to get the flux
     phi0_j=MoC_module(J,N,Tau,mat,...
@@ -83,10 +86,10 @@ function [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     end
 
     %% update cross section
-    mat.Sig_t_j=mat.Sig_t_j+gamma_coeff*(T_j-T0); % gamma*(T_j_new-T0) is fb.
-    % mat.Sig_gamma_j should be changed to.  But it does not affect the
-    % result so it's not updated yet. 
-
+    % gamma*(T_j_new-T0) is fb.
+    mat.Sig_gamma_j=Sig_gamma_ref_j+gamma_coeff*(T_j-T0); 
+    mat.Sig_t_j=Sig_t_ref_j+gamma_coeff*(T_j-T0);
+    
   end
 
 end
