@@ -66,7 +66,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     psi_MMS_Diff_j(j)= 1/h*integral(psi_MMS_Diff,x_L,x_R);
     for n=1:N
     Q_MMS_j_n(j,n)=mu_n(n)* psi_MMS_Diff_j(j) ...
-      +(Sig_t_j(j)-Sig_ss_j(j)-nuSig_f_j(j)) * psi_MMS_j(j);
+      +(Sig_t_j(j)-Sig_ss_j(j)-nuSig_f_j(j))*0.5 * phi0_MMS_j(j);
     end % n
   end % j
 
