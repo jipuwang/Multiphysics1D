@@ -1,18 +1,14 @@
 %% Info
-% This is a no_feedback_coupler, it does a lot of stuff for now including:
-% Pass the source to neutronics module and get the solution phi_j.
-% Build the fission heat source.
-% Pass the fission heat source and manufactured heat source (or the
-% addition of the two) to the heat conduction module and get the solution
-% T_j.
-
-% The name of the coupler should reveal the constant_quadratic case.
+% This is a coupler_without_fb, it does the following things:
+% 1. Solve for phi0_j with known source, e.g., MMS source.
+% 2. Build the fission heat source for TH problem.
+% 3. Solve for T_j with the above heat soruce (+ MMS soruce optionally). 
 
 function [phi0_j,T_j]=coupler_no_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
           T_L,T_R,p_MMS_j)
   % input parameters
   if ~exist('J','var')
-    Tau=10;
+    J=10;
   end
   if ~exist('N','var')
     N=16;
@@ -27,8 +23,9 @@ function [phi0_j,T_j]=coupler_no_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     field3 = 'Sig_t_j';  value3 = ones(J,1);
     field4 = 'thermal_cond_k_j'; value4 = ones(J,1);
     field5 = 'Sig_f_j'; value5 = ones(J,1)*0.1;
+    field6 = 'kappaSig_f_j'; value6 = ones(J,1)*0.1; % kappa=1.0;
     mat = struct(field1,value1,field2,value2,field3,value3,... 
-      field4,value4,field5,value5);
+      field4,value4,field5,value5,field6,value6);
   end
   if ~exist('psi_b1_n','var')
     psi_b1_n=ones(N,1)*1.0; % the first/negative half is not useful; n=N/2+1:N % mu>0
@@ -58,7 +55,7 @@ function [phi0_j,T_j]=coupler_no_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
            psi_b1_n,psi_b2_n,Q_MMS_j_n);
 
 %% The coupling
-  pTriplePrime_j=1*0.1*phi0_j; % kappa=1, sigma_f=0.1;
+  pTriplePrime_j=mat.kappaSig_f_j.*phi0_j; % kappa=1, sigma_f=0.1;
 
 %% Call the heat conduction module to get the temperature
   T_j=heat_cond_module(J,Tau,mat,T_L,T_R,pTriplePrime_j,p_MMS_j);
