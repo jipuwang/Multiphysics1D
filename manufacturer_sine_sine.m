@@ -1,4 +1,4 @@
-% A constant and quadratic solution generator including
+% A sine and sine solution generator including
     % Discretized analytical solution
     % Manufactured boundary conditions
     % Manufactured source
