@@ -12,16 +12,17 @@
 
 clear;
 nGrids=6;%10;%8;
+refinement=2;
 
 % Geometry
 Tau=10; 
 
-error_phi_n=zeros(nGrids,1);
+error_phi0_n=zeros(nGrids,1);
 error_T_n=zeros(nGrids,1);
 gridMeshSize_n=ones(nGrids,1);
 N=16; % angular discretization, fixed not refined. 
 for iGrid=1:nGrids
-  J=5*2^iGrid;
+  J=5*refinement^iGrid;
   gridMeshSize_n(iGrid)=Tau/J;
   
     % Material
@@ -58,9 +59,8 @@ for iGrid=1:nGrids
     end
         
   % Calculate the error compared to manufactured solution
-  error_phi_n(iGrid)=norm(phi0_j-phi0_j_ana,2)/sqrt(J);
+  error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana,2)/sqrt(J);
   error_T_n(iGrid)=norm(T_j-T_j_ana,2)/sqrt(J);
-  figure(111);hold on; plot(T_j);
 
 end
 
@@ -68,25 +68,56 @@ end
 order_phi=ones(nGrids-1,1);
 order_T=ones(nGrids-1,1);
 for j=1:nGrids-1
-  order_phi(j)=log(error_phi_n(j)/error_phi_n(j+1))/log(gridMeshSize_n(j)/gridMeshSize_n(j+1));
+  order_phi(j)=log(error_phi0_n(j)/error_phi0_n(j+1))/log(gridMeshSize_n(j)/gridMeshSize_n(j+1));
   order_T(j)=log(error_T_n(j)/error_T_n(j+1))/log(gridMeshSize_n(j)/gridMeshSize_n(j+1));
 end
 
 % Display the result
-error_phi_n
+error_phi0_n
 error_T_n
 order_phi
 order_T
 
 % Visualize the results
+orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
+
 figure(11)
-loglog(gridMeshSize_n,error_phi_n,'-*');
+loglog(gridMeshSize_n,error_phi0_n,'-*');
 % title('scalar flux error convergence');
 xlabel('mesh size in mean free path');
-ylabel('2-norm error of scalar flux');
+ylabel('RMS error of scalar flux');
+
+hold on;
+errorstt=error_phi0_n(1);
+firstOrder=[errorstt errorstt/refinement^(nGrids-1)];
+secondOrder=[errorstt errorstt/refinement^(2*(nGrids-1))];
+thirdOrder=[errorstt errorstt/refinement^(3*(nGrids-1))];
+fourthOrder=[errorstt errorstt/refinement^(4*(nGrids-1))];
+loglog(orderPlotGrid,firstOrder,'--');
+loglog(orderPlotGrid,secondOrder,'--');
+loglog(orderPlotGrid,thirdOrder,'--');
+loglog(orderPlotGrid,fourthOrder,'--');
+legend('scalar flux error','1st Order','2nd Order',...
+  '3rd Order','4th Order','location','best');
+hold off;
+
 figure(12)
 loglog(gridMeshSize_n,error_T_n,'-*');
 % title('temperature error convergence');
 xlabel('mesh size in mean free path');
-ylabel('2-norm error of temperature');
+ylabel('RMS error of temperature');
+
+hold on;
+errorstt=error_T_n(1);
+firstOrder=[errorstt errorstt/refinement^(nGrids-1)];
+secondOrder=[errorstt errorstt/refinement^(2*(nGrids-1))];
+thirdOrder=[errorstt errorstt/refinement^(3*(nGrids-1))];
+fourthOrder=[errorstt errorstt/refinement^(4*(nGrids-1))];
+loglog(orderPlotGrid,firstOrder,'--');
+loglog(orderPlotGrid,secondOrder,'--');
+loglog(orderPlotGrid,thirdOrder,'--');
+loglog(orderPlotGrid,fourthOrder,'--');
+legend('scalar flux error','1st Order','2nd Order',...
+  '3rd Order','4th Order','location','best');
+hold off;
 
