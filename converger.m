@@ -10,6 +10,7 @@
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
 
+clear;
 nGrids=6;%10;%8;
 
 % Geometry
