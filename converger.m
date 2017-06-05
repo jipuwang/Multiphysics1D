@@ -85,7 +85,7 @@ figure(11)
 loglog(gridMeshSize_n,error_phi0_n,'-*');
 % title('scalar flux error convergence');
 xlabel('mesh size in mean free path');
-ylabel('RMS error of scalar flux');
+ylabel('scalar flux error RMS');
 
 hold on;
 errorstt=error_phi0_n(1);
@@ -105,7 +105,7 @@ figure(12)
 loglog(gridMeshSize_n,error_T_n,'-*');
 % title('temperature error convergence');
 xlabel('mesh size in mean free path');
-ylabel('RMS error of temperature');
+ylabel('temperature error RMS');
 
 hold on;
 errorstt=error_T_n(1);
@@ -117,7 +117,7 @@ loglog(orderPlotGrid,firstOrder,'--');
 loglog(orderPlotGrid,secondOrder,'--');
 loglog(orderPlotGrid,thirdOrder,'--');
 loglog(orderPlotGrid,fourthOrder,'--');
-legend('scalar flux error','1st Order','2nd Order',...
+legend('temperature error','1st Order','2nd Order',...
   '3rd Order','4th Order','location','best');
 hold off;
 
