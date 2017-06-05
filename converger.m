@@ -25,14 +25,15 @@ for iGrid=1:nGrids
   gridMeshSize_n(iGrid)=Tau/J;
   
     % Material
-    field1 = 'Sig_ss_j';  value1 = ones(J,1)*0.5;
-    field2 = 'nuSig_f_j';  value2 = ones(J,1)*0.2;
-    field3 = 'Sig_t_j';  value3 = ones(J,1);
-    field4 = 'thermal_cond_k_j'; value4 = ones(J,1);
-    field5 = 'Sig_f_j'; value5 = ones(J,1)*0.1;
-    field6 = 'kappaSig_f_j'; value6 = ones(J,1)*0.1; % kappa=1.0;
+    field1='Sig_t_j';          value1=ones(J,1);
+    field2='Sig_ss_j';         value2=ones(J,1)*0.5;
+    field3='Sig_gamma_j';      value3=ones(J,1)*0.4;
+    field4='Sig_f_j';          value4=ones(J,1)*0.1;
+    field5='nuSig_f_j';        value5=ones(J,1)*0.2;
+    field6='thermal_cond_k_j'; value6=ones(J,1);
+    field7='kappaSig_f_j';     value7=ones(J,1)*0.1; % kappa=1.0;
     mat = struct(field1,value1,field2,value2,field3,value3,... 
-      field4,value4,field5,value5,field6,value6);
+      field4,value4,field5,value5,field6,value6,field7,value7);
   
   % call the manufacturer to get MMS problem and solution
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
