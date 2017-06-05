@@ -59,7 +59,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   for j=1:J
     x_L=(j-1)*h;x_R=j*h;
     Sig_gamma_j(j)=integral(Sig_gammaDotpsi_MMS,x_L,x_R) ...
-      /h; %integral(psi_MMS,x_L,x_R); Could have angular dependence!!!
+      /integral(psi_MMS,x_L,x_R); % Could have angular dependence!!!
   end
   Sig_t_j=Sig_ss_j+Sig_gamma_j+Sig_f_j;  
   
