@@ -55,8 +55,8 @@ function [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
 
   % Start the Picard Iteration
   T0=50;
-%   gamma=0.000;
-  gamma_coeff=0.004;
+  gamma=0.000;
+%   gamma_coeff=0.004;
   T_j_old=zeros(J,1);
   phi0_j_old=zeros(1,J);
   isConverged=false;

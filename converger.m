@@ -121,4 +121,5 @@ loglog(orderPlotGrid,fourthOrder,'--');
 legend('temperature error','1st Order','2nd Order',...
   '3rd Order','4th Order','location','best');
 hold off;
+aa=0.0;
 

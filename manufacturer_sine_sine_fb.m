@@ -51,7 +51,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   % Change in capture is reflected in change in total. 
   % Sig_gamma is to be weighted by angualar flux. 
   T0=50;
-  gamma_coeff=0.004;
+  gamma_coeff=0.004*0.0;
   % Assumes the original xs is homogeneous
   Sig_gamma =@(x) mat.Sig_gamma_j(1)+gamma_coeff*(T_MMS(x)-T0);
   Sig_gammaDotpsi_MMS =@(x) Sig_gamma(x).*psi_MMS(x);
