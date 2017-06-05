@@ -56,7 +56,7 @@ function [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   % Start the Picard Iteration
   T0=50;
 %   gamma=0.000;
-  gamma=0.004;
+  gamma_coeff=0.004;
   T_j_old=zeros(J,1);
   phi0_j_old=zeros(1,J);
   isConverged=false;
@@ -83,7 +83,7 @@ function [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     end
 
     %% update cross section
-    mat.Sig_t_j=mat.Sig_t_j+gamma*(T_j-T0); % gamma*(T_j_new-T0) is fb.
+    mat.Sig_t_j=mat.Sig_t_j+gamma_coeff*(T_j-T0); % gamma*(T_j_new-T0) is fb.
 
   end
 
