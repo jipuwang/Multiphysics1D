@@ -53,7 +53,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
 
   Q_MMS_j_n=zeros(J,N); % preallocate memory, avg'ed over tau_(j-1/2) and tau_(j+1/2)
   % MMS source: mu_n * derivative(psi_MMS) ...
-  % + (Sig_t-Sig_ss-nuSig_f)* psi_MMS
+  % + Sig_t* psi_MMS - (Sig_ss+nuSig_f)*0.5*phi0_MMS
   
   phi0_MMS_j=zeros(J,1);
   for j=1:J
