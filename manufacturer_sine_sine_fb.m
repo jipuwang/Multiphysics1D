@@ -42,10 +42,24 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   %% Manufactured Solutions for both fields
   % They need to be pre-defined here due to temperature dependence on the
   % xs. 
-  % Manufactured neutronics solution \psi(x,\mu)=sin(pi*x/Tau), 0<x<Tau
-  psi_MMS =@(x) sin(pi*x/Tau)
-  % Manufactured TH solution T(x)=sin(pi*x/Tau), 0<x<Tau
-  T_MMS =@(x) sin(pi*x/Tau);
+  % Options includes: sine_sine, const_quadratic, etc.
+  assumedSolution='const_quadratic'; 
+  switch(assumedSolution)
+    case('sine_sine')
+      % Manufactured neutronics solution \psi(x,\mu)=sin(pi*x/Tau), 0<x<Tau
+      psi_MMS =@(x) sin(pi*x/Tau)
+      psi_MMS_Diff =@(x) pi/Tau*cos(pi*x/Tau);
+      % Manufactured TH solution T(x)=sin(pi*x/Tau), 0<x<Tau
+      T_MMS =@(x) sin(pi*x/Tau);
+      T_MMS_xx =@(x) -(pi*pi/Tau/Tau)*sin(pi*x/Tau);
+    case('const_quadratic')
+      % Manufactured neutronics solution \psi(x,\mu)=1.0, 0<x<Tau
+      psi_MMS =@(x) 1.0+x*0.0;
+      psi_MMS_Diff =@(x) x*0.0;
+      % Manufactured TH solution T(x)=x.^2, 0<x<Tau
+      T_MMS =@(x) x.^2;
+      T_MMS_xx =@(x) 2.0+x*0.0;
+  end
   
   %% XS update due to temperature feedback!
   % Change in capture is reflected in change in total. 
@@ -63,7 +77,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   end
   Sig_t_j=Sig_ss_j+Sig_gamma_j+Sig_f_j;  
   
-  %% For MoC MMS solution and problem  
+  %% For MoC MMS solution and problem
   % Boundary condition and source
   % psi expression evaluated at x=0
   psi_b1_n=psi_MMS(0)*ones(N,1); % n=N/2+1:N % mu>0
@@ -74,7 +88,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   % MMS source: mu_n * derivative(psi_MMS) +Sig_t* psi_MMS ...
   % -(Sig_ss+nuSig_f)*0.5*phi0_MMS;
 
-  psi_MMS_Diff =@(x) pi/Tau*cos(pi*x/Tau);
+
   psi_MMS_j=zeros(J,1);
   phi0_MMS_j=zeros(J,1);
   psi_MMS_Diff_j=zeros(J,1); % This is needed to build MMS source
@@ -91,9 +105,6 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   end % j
   
   %% For TH MMS solution and problem
-  % Assumed manfuactured solution T(x)=sin(pi*x/Tau), 0<x<Tau
-  T_MMS_xx =@(x) -(pi*pi/Tau/Tau)*sin(pi*x/Tau);
-  
   % Boundary condition and source
   % Left boundary, T_MMS evaluated at x=0;
   T_L=T_MMS(0);
