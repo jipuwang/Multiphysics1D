@@ -3,7 +3,7 @@
     % Manufactured boundary conditions
     % Manufactured source
 function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
-          T_MMS_j,T_L,T_R,q_MMS_j]=manufacturer_linear_fb(J,N,Tau,mat)
+          T_MMS_j,T_L,T_R,q_MMS_j]=manufacturer_linear_fb(J,N,Tau,mat,hasFeedback)
   % input parameters
   if ~exist('J','var')
     J=5*2;%*2%*2*2*2*2*2*2*2*2
@@ -26,7 +26,9 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     mat = struct(field1,value1,field2,value2,field3,value3,... 
       field4,value4,field5,value5,field6,value6,field7,value7);
   end
-
+  if ~exist('hasFeedback','var')
+    hasFeedback=1;
+  end
   % Material
   Sig_t_j=mat.Sig_t_j;
   Sig_ss_j=mat.Sig_ss_j;
@@ -43,11 +45,11 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   % They need to be pre-defined here due to temperature dependence on the
   % xs. 
   % Options includes: sine_sine, const_quadratic, etc.
-  assumedSolution='const_quadratic'; 
+  assumedSolution='sine_sine'; 
   switch(assumedSolution)
     case('sine_sine')
       % Manufactured neutronics solution \psi(x,\mu)=sin(pi*x/Tau), 0<x<Tau
-      psi_MMS =@(x) sin(pi*x/Tau)
+      psi_MMS =@(x) sin(pi*x/Tau);
       psi_MMS_Diff =@(x) pi/Tau*cos(pi*x/Tau);
       % Manufactured TH solution T(x)=sin(pi*x/Tau), 0<x<Tau
       T_MMS =@(x) sin(pi*x/Tau);
@@ -64,8 +66,12 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   %% XS update due to temperature feedback!
   % Change in capture is reflected in change in total. 
   % Sig_gamma is to be weighted by angualar flux. 
+  if hasFeedback
+    gamma_coeff=0.004;
+  else
+    gamma_coeff=0.0;
+  end
   T0=50;
-  gamma_coeff=0.004;
   % Assumes the original xs is homogeneous
   Sig_gamma =@(x) mat.Sig_gamma_j(1)+gamma_coeff*(T_MMS(x)-T0);
   Sig_gammaDotpsi_MMS =@(x) Sig_gamma(x).*psi_MMS(x);
