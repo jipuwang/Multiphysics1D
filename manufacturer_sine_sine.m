@@ -54,7 +54,8 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   
   Q_MMS_j_n=zeros(J,N); % preallocate memory, avg'ed over tau_(j-1/2) and tau_(j+1/2)
   % MMS source: mu_n * derivative(psi_MMS) ...
-  % + (Sig_t-Sig_ss-nuSig_f)* psi_MMS
+  % + Sig_t* psi_MMS - (Sig_ss+nuSig_f)*0.5*phi0_MMS
+  
   phi0_MMS_j=zeros(J,1);
   psi_MMS_j=zeros(J,1);
   psi_MMS_Diff_j=zeros(J,1); % This is needed to build MMS source
@@ -65,8 +66,8 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     phi0_MMS_j(j)=2.0*psi_MMS_j(j);
     psi_MMS_Diff_j(j)= 1/h*integral(psi_MMS_Diff,x_L,x_R);
     for n=1:N
-    Q_MMS_j_n(j,n)=mu_n(n)* psi_MMS_Diff_j(j) ...
-      +(Sig_t_j(j)-Sig_ss_j(j)-nuSig_f_j(j))*0.5 * phi0_MMS_j(j);
+    Q_MMS_j_n(j,n)=mu_n(n)* psi_MMS_Diff_j(j) +Sig_t_j(j)*psi_MMS_j(j) ...
+      -(Sig_ss_j(j)+nuSig_f_j(j))*0.5* phi0_MMS_j(j);
     end % n
   end % j
 
