@@ -83,7 +83,7 @@ order_T
 orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
 
 figure(11)
-loglog(gridMeshSize_n,error_phi0_n,'-*');
+loglog(gridMeshSize_n,error_phi0_n,'*');
 % title('scalar flux error convergence');
 xlabel('mesh size [cm]');
 ylabel('scalar flux error RMS');
@@ -103,7 +103,7 @@ legend('scalar flux error','1st Order','2nd Order',...
 hold off;
 
 figure(12)
-loglog(gridMeshSize_n,error_T_n,'-*');
+loglog(gridMeshSize_n,error_T_n,'*');
 % title('temperature error convergence');
 xlabel('mesh size [cm]');
 ylabel('temperature error RMS');
