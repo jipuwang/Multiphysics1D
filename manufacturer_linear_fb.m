@@ -3,7 +3,7 @@
     % Manufactured boundary conditions
     % Manufactured source
 function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
-          T_MMS_j,T_L,T_R,q_MMS_j]=manufacturer_sine_sine_fb(J,N,Tau,mat)
+          T_MMS_j,T_L,T_R,q_MMS_j]=manufacturer_linear_fb(J,N,Tau,mat)
   % input parameters
   if ~exist('J','var')
     J=5*2;%*2%*2*2*2*2*2*2*2*2
