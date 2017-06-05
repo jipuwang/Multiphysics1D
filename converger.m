@@ -34,19 +34,28 @@ for iGrid=1:nGrids
     field7='kappaSig_f_j';     value7=ones(J,1)*0.1; % kappa=1.0;
     mat = struct(field1,value1,field2,value2,field3,value3,... 
       field4,value4,field5,value5,field6,value6,field7,value7);
-  
-  % call the manufacturer to get MMS problem and solution
-  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,T_j_ana,T_L,T_R,p_MMS_j]=...
-    manufacturer_const_quadratic_fb(J,N,Tau,mat);
-%     manufacturer_const_quadratic(J,N,Tau,mat);
-%     manufacturer_sine_sine(J,N,Tau,mat);
+    
+    hasFeedback=1;
+    % no feedback
+    if hasFeedback
+      % call the manufacturer to get MMS problem and solution
+      [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,T_j_ana,T_L,T_R,p_MMS_j]=...
+        manufacturer_const_quadratic_fb(J,N,Tau,mat);
 
-  
-  % call the coupler to solve the above manufactured problem
-%   [phi0_j,T_j]=coupler_no_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
-%           T_L,T_R,p_MMS_j);
-  [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
-          T_L,T_R,p_MMS_j);
+      % call the coupler to solve the above manufactured problem
+      [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
+              T_L,T_R,p_MMS_j);
+    else % no feedback
+      % call the manufacturer to get MMS problem and solution
+      [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,T_j_ana,T_L,T_R,p_MMS_j]=...
+        manufacturer_const_quadratic(J,N,Tau,mat);
+%       [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,T_j_ana,T_L,T_R,p_MMS_j]=...
+%         manufacturer_sine_sine(J,N,Tau,mat);
+
+      % call the coupler to solve the above manufactured problem
+      [phi0_j,T_j]=coupler_no_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
+              T_L,T_R,p_MMS_j);
+    end
         
   % Calculate the error compared to manufactured solution
   error_phi_n(iGrid)=norm(phi0_j-phi0_j_ana,2)/sqrt(J);
