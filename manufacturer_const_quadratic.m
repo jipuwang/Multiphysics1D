@@ -21,18 +21,18 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     field3 = 'Sig_t_j';  value3 = ones(J,1);
     field4 = 'thermal_cond_k_j'; value4 = ones(J,1);
     field5 = 'Sig_f_j'; value5 = ones(J,1)*0.1;
+    field6 = 'kappaSig_f_j'; value6 = ones(J,1)*0.1; % kappa=1.0;
     mat = struct(field1,value1,field2,value2,field3,value3,... 
-      field4,value4,field5,value5);
+      field4,value4,field5,value5,field6,value6);
   end
 
   % Material
   Sig_ss_j=mat.Sig_ss_j;
   nuSig_f_j=mat.nuSig_f_j;
+  kappaSig_f_j=mat.kappaSig_f_j;
   Sig_f_j=mat.Sig_f_j;
   Sig_t_j=mat.Sig_t_j;
   k_F=mat.thermal_cond_k_j(1);
-  % random placement of a variable here
-  kappa=1.0;
 
   h=Tau/J;
   [mu_n,weight_n]=lgwt(N,-1,1); mu_n=flipud(mu_n);
@@ -85,7 +85,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     x_L=(j-1)*h;x_R=j*h;
     T_MMS_j(j)=1/h*integral(T_MMS,x_L,x_R);
     T_MMS_xx_j(j)=2.0;
-    q_MMS_j(j)=k_F*T_MMS_xx_j(j)+kappa*Sig_f_j(j)*phi0_MMS_j(j);
+    q_MMS_j(j)=k_F*T_MMS_xx_j(j)+kappaSig_f_j(j)*phi0_MMS_j(j);
   end
 
 end
