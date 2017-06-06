@@ -19,7 +19,7 @@ Tau=10;
 
 % Case configure options
 fbType='linear'; % other options: 'noFeedback', 'squareRoot'
-assumedSoln='sine_sine'; % other option: 'const_quadratic'
+assumedSoln='const_quadratic'; % other option: 'const_quadratic','sine_sine'
 
 error_phi0_n=zeros(nGrids,1);
 error_T_n=zeros(nGrids,1);
@@ -120,5 +120,8 @@ loglog(orderPlotGrid,fourthOrder,'--');
 legend('temperature error','1st Order','2nd Order',...
   '3rd Order','4th Order','location','best');
 hold off;
-aa=0.0;
 
+% Display the problem
+display(fbType);
+display(assumedSoln);
+aa=0.0;
