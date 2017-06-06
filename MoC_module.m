@@ -4,8 +4,8 @@
 %   Spatial discretization J (or mesh size)
 %   Angular discretization N
 %   Material: all cross sections
-%   Distributed source, can be MMS
 %   Boundary condition
+%   Distributed source, can be MMS
 % Output: 
 %   Cell-averaged scalar flux
 
