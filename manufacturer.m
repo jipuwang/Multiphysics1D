@@ -79,7 +79,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
         % Assumes the original xs is homogeneous
         T0=50;
         gamma_coeff=0.004;
-        Sig_gamma =@(x) mat.Sig_gamma_j(1)*gamma_coeff*(T_MMS(x)-T0);
+        Sig_gamma =@(x) mat.Sig_gamma_j(1)+gamma_coeff*(T_MMS(x)-T0);
       case 'squareRoot'
         T0=50;
         Sig_gamma =@(x) mat.Sig_gamma_j(1)*sqrt(T0./(T_MMS(x)+1));
