@@ -45,16 +45,9 @@ for iGrid=1:nGrids
         T_j_ana,T_L,T_R,p_MMS_j]=...
         manufacturer(J,N,Tau,mat,assumedSoln,fbType);
 
-  switch fbType
-    case {'linear','squareRoot'}
-      % call the coupler to solve the above manufactured problem
-      [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
-              T_L,T_R,p_MMS_j);
-    case 'noFeedback'
-      % call the coupler to solve the above manufactured problem
-      [phi0_j,T_j]=coupler_no_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
-              T_L,T_R,p_MMS_j);
-  end
+  % call the coupler to solve the above manufactured problem
+  [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
+              T_L,T_R,p_MMS_j,fbType);
   
   % Calculate the error compared to manufactured solution
   error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana,2)/sqrt(J);

@@ -6,8 +6,9 @@
 % 4. Use T_j to update the xs
 % 5. Return to S1 until convergence in both phi0_j and T_j.
 
-function [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
-          T_L,T_R,p_MMS_j)
+function [phi0_j,T_j]=...
+  coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
+          T_L,T_R,p_MMS_j,fbType)
   % input parameters
   if ~exist('J','var')
     J=10;
@@ -52,6 +53,9 @@ function [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
       p_MMS_j(j)=2.2;
     end
   end
+  if ~exist('fbType','var')
+    fbType='linear';
+  end
 
   % Start the Picard Iteration
   T0=50;
@@ -84,11 +88,18 @@ function [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
       isConverged=true;
       break;
     end
-
+    
     %% update cross section
-    % gamma*(T_j_new-T0) is fb.
-    mat.Sig_gamma_j=Sig_gamma_ref_j+gamma_coeff*(T_j-T0); 
-    mat.Sig_t_j=Sig_t_ref_j+gamma_coeff*(T_j-T0);
+    switch fbType
+      case 'noFeedback'
+        break;
+      case 'linear'
+        % gamma*(T_j_new-T0) is fb.
+        mat.Sig_gamma_j=Sig_gamma_ref_j+gamma_coeff*(T_j-T0); 
+        mat.Sig_t_j=Sig_t_ref_j+gamma_coeff*(T_j-T0);
+      case 'squareRoot'
+        % to be added
+    end
     
   end
 
