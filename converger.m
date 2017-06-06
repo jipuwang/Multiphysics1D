@@ -18,8 +18,8 @@ refinement=2;
 Tau=10; 
 
 % Case configure options
-fbType='linear'; % other options: 'noFeedback', 'squareRoot'
-assumedSoln='const_quadratic'; % other option: 'const_quadratic','sine_sine'
+fbType='squareRoot'; % options: 'linear','noFeedback','squareRoot'
+assumedSoln='sine_sine'; % options: 'const_quadratic','sine_sine'
 
 error_phi0_n=zeros(nGrids,1);
 error_T_n=zeros(nGrids,1);
@@ -46,7 +46,7 @@ for iGrid=1:nGrids
         manufacturer(J,N,Tau,mat,assumedSoln,fbType);
 
   % call the coupler to solve the above manufactured problem
-  [phi0_j,T_j]=coupler_fb(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
+  [phi0_j,T_j]=coupler(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
               T_L,T_R,p_MMS_j,fbType);
   
   % Calculate the error compared to manufactured solution
@@ -113,6 +113,18 @@ loglog(orderPlotGrid,fourthOrder,'--');
 legend('temperature error','1st Order','2nd Order',...
   '3rd Order','4th Order','location','best');
 hold off;
+
+% Plot the solution
+figure(13)
+plot(phi0_j);
+% title('scalar flux');
+xlabel('mesh size [cm]');
+ylabel('scalar flux');
+figure(14)
+plot(T_j);
+% title('temperature');
+xlabel('mesh size [cm]');
+ylabel('temperature');
 
 % Display the problem
 display(fbType);
