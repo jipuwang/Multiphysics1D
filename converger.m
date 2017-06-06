@@ -12,13 +12,13 @@
 
 clear;
 nGrids=6;%10;%8;
-refinement=2;
+refinementRatio=2;
 
 % Geometry
 Tau=10; 
 
 % Case configure options
-fbType='squareRoot'; % options: 'linear','noFeedback','squareRoot'
+fbType='linear'; % options: 'linear','noFeedback','squareRoot'
 assumedSoln='sine_sine'; % options: 'const_quadratic','sine_sine'
 
 error_phi0_n=zeros(nGrids,1);
@@ -26,7 +26,7 @@ error_T_n=zeros(nGrids,1);
 gridMeshSize_n=ones(nGrids,1);
 N=16; % angular discretization, fixed not refined. 
 for iGrid=1:nGrids
-  J=5*refinement^iGrid;
+  J=5*refinementRatio^iGrid;
   gridMeshSize_n(iGrid)=Tau/J;
   
   % Material
@@ -59,8 +59,10 @@ end
 order_phi_nMinus1=ones(nGrids-1,1);
 order_T_nMinus1=ones(nGrids-1,1);
 for j=1:nGrids-1
-  order_phi_nMinus1(j)=log(error_phi0_n(j)/error_phi0_n(j+1))/log(gridMeshSize_n(j)/gridMeshSize_n(j+1));
-  order_T_nMinus1(j)=log(error_T_n(j)/error_T_n(j+1))/log(gridMeshSize_n(j)/gridMeshSize_n(j+1));
+  order_phi_nMinus1(j)=log(error_phi0_n(j)/error_phi0_n(j+1)) / ...
+    log(gridMeshSize_n(j)/gridMeshSize_n(j+1));
+  order_T_nMinus1(j)=log(error_T_n(j)/error_T_n(j+1)) / ...
+    log(gridMeshSize_n(j)/gridMeshSize_n(j+1));
 end
 
 % Display the result
@@ -72,7 +74,7 @@ order_T_nMinus1
 % Visualize the results
 orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
 
-figure(11)
+scalarFluxErrorRMS_plot_handle=figure(11);
 loglog(gridMeshSize_n,error_phi0_n,'*');
 % title('scalar flux error convergence');
 xlabel('mesh size [cm]');
@@ -80,11 +82,11 @@ ylabel('scalar flux error RMS');
 
 hold on;
 orderGuess=round(order_phi_nMinus1(end));
-errorStt=error_phi0_n(end)*refinement^(orderGuess*(nGrids-1));
-firstOrder=[errorStt errorStt/refinement^(nGrids-1)];
-secondOrder=[errorStt errorStt/refinement^(2*(nGrids-1))];
-thirdOrder=[errorStt errorStt/refinement^(3*(nGrids-1))];
-fourthOrder=[errorStt errorStt/refinement^(4*(nGrids-1))];
+errorStt=error_phi0_n(end)*refinementRatio^(orderGuess*(nGrids-1));
+firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
+secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
+thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
+fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
 loglog(orderPlotGrid,firstOrder,'--');
 loglog(orderPlotGrid,secondOrder,'--');
 loglog(orderPlotGrid,thirdOrder,'--');
@@ -93,7 +95,7 @@ legend('scalar flux error','1st Order','2nd Order',...
   '3rd Order','4th Order','location','best');
 hold off;
 
-figure(12)
+temperatureErrorRM_plot_handle=figure(12);
 loglog(gridMeshSize_n,error_T_n,'*');
 % title('temperature error convergence');
 xlabel('mesh size [cm]');
@@ -101,11 +103,11 @@ ylabel('temperature error RMS');
 
 hold on;
 orderGuess=round(order_T_nMinus1(end));
-errorStt=error_T_n(end)*refinement^(orderGuess*(nGrids-1));
-firstOrder=[errorStt errorStt/refinement^(nGrids-1)];
-secondOrder=[errorStt errorStt/refinement^(2*(nGrids-1))];
-thirdOrder=[errorStt errorStt/refinement^(3*(nGrids-1))];
-fourthOrder=[errorStt errorStt/refinement^(4*(nGrids-1))];
+errorStt=error_T_n(end)*refinementRatio^(orderGuess*(nGrids-1));
+firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
+secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
+thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
+fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
 loglog(orderPlotGrid,firstOrder,'--');
 loglog(orderPlotGrid,secondOrder,'--');
 loglog(orderPlotGrid,thirdOrder,'--');
@@ -115,18 +117,31 @@ legend('temperature error','1st Order','2nd Order',...
 hold off;
 
 % Plot the solution
-figure(13)
+scalarFlux_plot_handle=figure(13);
 plot(phi0_j);
 % title('scalar flux');
 xlabel('mesh size [cm]');
 ylabel('scalar flux');
-figure(14)
+
+temperature_plot_handle=figure(14);
 plot(T_j);
 % title('temperature');
 xlabel('mesh size [cm]');
 ylabel('temperature');
 
-% Display the problem
+% Display the problem description
 display(fbType);
 display(assumedSoln);
+
+% Save the plots
+phi0_RMS_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'phi0_RMS'];
+T_RMS_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'T_RMS'];
+phi0_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'phi0'];
+T_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'T'];
+
+savefig(scalarFluxErrorRMS_plot_handle,phi0_RMS_fn)
+savefig(temperatureErrorRM_plot_handle,T_RMS_fn)
+savefig(scalarFlux_plot_handle,phi0_fn)
+savefig(temperature_plot_handle,T_fn)
+
 aa=0.0;
