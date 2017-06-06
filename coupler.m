@@ -66,7 +66,6 @@ function [phi0_j,T_j]=...
   isConverged=false;
   % save the capture xs before the correction.
   Sig_gamma_ref_j=mat.Sig_gamma_j;
-  Sig_t_ref_j=mat.Sig_t_j;
   while ~isConverged
     %% Call the MoC module to get the flux
     phi0_j=MoC_module(J,N,Tau,mat,...
@@ -96,11 +95,11 @@ function [phi0_j,T_j]=...
       case 'linear'
         % gamma*(T_j_new-T0) is fb.
         mat.Sig_gamma_j=Sig_gamma_ref_j+gamma_coeff*(T_j-T0); 
-        mat.Sig_t_j=Sig_t_ref_j+gamma_coeff*(T_j-T0);
       case 'squareRoot'
-        % to be added
+        mat.Sig_gamma_j=Sig_gamma_ref_j.*sqrt(T0./(T_j+1));
     end
-    
+    mat.Sig_t_j=mat.Sig_ss_j+mat.Sig_gamma_j+mat.Sig_f_j;
+
   end
 
 end
