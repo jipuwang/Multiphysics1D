@@ -27,7 +27,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     mat = struct(field1,value1,field2,value2,field3,value3,... 
       field4,value4,field5,value5,field6,value6,field7,value7);
   end
-  if ~exist('hasFeedback','var')
+  if ~exist('assumedSoln','var')
     assumedSoln='sine_sine';
 %     assumedSoln='const_quadratic');
   end
@@ -72,29 +72,29 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   %% XS update due to temperature feedback!
   % Change in capture is reflected in change in total. 
   % Sig_gamma is to be weighted by angualar flux. 
-  switch fbType
-    case 'linear'
-      gamma_coeff=0.004;
-    case 'noFeedback'
-      gamma_coeff=0.0;
+  
+  if ~strcmp(fbType,'noFeedback')
+    switch fbType
+      case 'linear'
+        % Assumes the original xs is homogeneous
+        T0=50;
+        gamma_coeff=0.004;
+        Sig_gamma =@(x) mat.Sig_gamma_j(1)*gamma_coeff*(T_MMS(x)-T0);
+      case 'squareRoot'
+        T0=50;
+        Sig_gamma =@(x) mat.Sig_gamma_j(1)*sqrt(T0./(T_MMS(x)+1));
+    end
+    Sig_gammaDotpsi_MMS =@(x) Sig_gamma(x).*psi_MMS(x);
+    % Updated capture xs
+    for j=1:J
+      x_L=(j-1)*h;x_R=j*h;
+      Sig_gamma_j(j)=integral(Sig_gammaDotpsi_MMS,x_L,x_R) ...
+        /integral(psi_MMS,x_L,x_R); % Could have angular dependence!!!
+    end
+    Sig_t_j=Sig_ss_j+Sig_gamma_j+Sig_f_j;  
   end
   
-  switch fbType
-    case {'linear','noFeedback'}
-      T0=50;
-      % Assumes the original xs is homogeneous
-      Sig_gamma =@(x) mat.Sig_gamma_j(1)+gamma_coeff*(T_MMS(x)-T0);
-      Sig_gammaDotpsi_MMS =@(x) Sig_gamma(x).*psi_MMS(x);
-      % Updated capture xs
-      for j=1:J
-        x_L=(j-1)*h;x_R=j*h;
-        Sig_gamma_j(j)=integral(Sig_gammaDotpsi_MMS,x_L,x_R) ...
-          /integral(psi_MMS,x_L,x_R); % Could have angular dependence!!!
-      end
-      Sig_t_j=Sig_ss_j+Sig_gamma_j+Sig_f_j;  
-    case 'sqareRoot'
-      % to be added;
-  end
+
   
   %% For MoC MMS solution and problem
   % Boundary condition and source
