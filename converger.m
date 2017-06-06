@@ -18,8 +18,8 @@ refinementRatio=2;
 Tau=10; 
 
 % Case configure options
-fbType='linear'; % options: 'linear','noFeedback','squareRoot'
-assumedSoln='sine_sine'; % options: 'const_quadratic','sine_sine'
+fbType='linear'; % options: 'noFeedback','linear','squareRoot'
+assumedSoln='const_quadratic'; % options: 'const_quadratic','sine_sine'
 
 error_phi0_n=zeros(nGrids,1);
 error_T_n=zeros(nGrids,1);

@@ -58,9 +58,6 @@ function [phi0_j,T_j]=...
   end
 
   % Start the Picard Iteration
-  T0=50;
-%   gamma_coeff=0.000;
-  gamma_coeff=0.004;
   T_j_old=zeros(J,1);
   phi0_j_old=zeros(1,J);
   isConverged=false;
@@ -93,9 +90,12 @@ function [phi0_j,T_j]=...
       case 'noFeedback'
         break;
       case 'linear'
-        % gamma*(T_j_new-T0) is fb.
+        % gamma_coeff*(T_j_new-T0) is fb.
+        T0=50;
+        gamma_coeff=0.004;
         mat.Sig_gamma_j=Sig_gamma_ref_j+gamma_coeff*(T_j-T0); 
       case 'squareRoot'
+        T0=50;
         mat.Sig_gamma_j=Sig_gamma_ref_j.*sqrt(T0./(T_j+1));
     end
     mat.Sig_t_j=mat.Sig_ss_j+mat.Sig_gamma_j+mat.Sig_f_j;
