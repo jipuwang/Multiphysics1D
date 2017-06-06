@@ -3,7 +3,8 @@
     % Manufactured boundary conditions
     % Manufactured source
 function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
-          T_MMS_j,T_L,T_R,q_MMS_j]=manufacturer_linear_or_noFB(J,N,Tau,mat,hasFeedback)
+          T_MMS_j,T_L,T_R,q_MMS_j]=...
+          manufacturer_linear_or_noFB(J,N,Tau,mat,assumedSoln,fbType)
   % input parameters
   if ~exist('J','var')
     J=5*2;%*2%*2*2*2*2*2*2*2*2
@@ -27,7 +28,10 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
       field4,value4,field5,value5,field6,value6,field7,value7);
   end
   if ~exist('hasFeedback','var')
-    hasFeedback=1;
+    assumedSoln='sine_sine';
+  end
+  if ~exist('fbType','var')
+    fbType='linear';
   end
   % Material
   Sig_t_j=mat.Sig_t_j;
@@ -45,8 +49,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   % They need to be pre-defined here due to temperature dependence on the
   % xs. 
   % Options includes: sine_sine, const_quadratic, etc.
-  assumedSolution='sine_sine'; 
-  switch(assumedSolution)
+  switch(assumedSoln)
     case('sine_sine')
       % Manufactured neutronics solution \psi(x,\mu)=sin(pi*x/Tau), 0<x<Tau
       psi_MMS =@(x) sin(pi*x/Tau);
@@ -66,22 +69,29 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   %% XS update due to temperature feedback!
   % Change in capture is reflected in change in total. 
   % Sig_gamma is to be weighted by angualar flux. 
-  if hasFeedback
-    gamma_coeff=0.004;
-  else
-    gamma_coeff=0.0;
+  switch fbType
+    case 'linear'
+      gamma_coeff=0.004;
+    case 'noFeedback'
+      gamma_coeff=0.0;
   end
-  T0=50;
-  % Assumes the original xs is homogeneous
-  Sig_gamma =@(x) mat.Sig_gamma_j(1)+gamma_coeff*(T_MMS(x)-T0);
-  Sig_gammaDotpsi_MMS =@(x) Sig_gamma(x).*psi_MMS(x);
-  % Updated capture xs
-  for j=1:J
-    x_L=(j-1)*h;x_R=j*h;
-    Sig_gamma_j(j)=integral(Sig_gammaDotpsi_MMS,x_L,x_R) ...
-      /integral(psi_MMS,x_L,x_R); % Could have angular dependence!!!
+  
+  switch fbType
+    case {'linear','noFeedback'}
+      T0=50;
+      % Assumes the original xs is homogeneous
+      Sig_gamma =@(x) mat.Sig_gamma_j(1)+gamma_coeff*(T_MMS(x)-T0);
+      Sig_gammaDotpsi_MMS =@(x) Sig_gamma(x).*psi_MMS(x);
+      % Updated capture xs
+      for j=1:J
+        x_L=(j-1)*h;x_R=j*h;
+        Sig_gamma_j(j)=integral(Sig_gammaDotpsi_MMS,x_L,x_R) ...
+          /integral(psi_MMS,x_L,x_R); % Could have angular dependence!!!
+      end
+      Sig_t_j=Sig_ss_j+Sig_gamma_j+Sig_f_j;  
+    case 'sqareRoot'
+      % to be added;
   end
-  Sig_t_j=Sig_ss_j+Sig_gamma_j+Sig_f_j;  
   
   %% For MoC MMS solution and problem
   % Boundary condition and source
