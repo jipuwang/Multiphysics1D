@@ -17,6 +17,10 @@ refinement=2;
 % Geometry
 Tau=10; 
 
+% Case configure options
+fbType='linear'; % other options: 'noFeedback', 'squareRoot'
+assumedSoln='sine_sine'; % other option: 'const_quadratic'
+
 error_phi0_n=zeros(nGrids,1);
 error_T_n=zeros(nGrids,1);
 gridMeshSize_n=ones(nGrids,1);
@@ -35,9 +39,6 @@ for iGrid=1:nGrids
   field7='kappaSig_f_j';     value7=ones(J,1)*0.1; % kappa=1.0;
   mat = struct(field1,value1,field2,value2,field3,value3,... 
     field4,value4,field5,value5,field6,value6,field7,value7);
-
-  fbType='linear'; % other options: 'noFeedback', 'squareRoot'
-  assumedSoln='sine_sine'; % other option: 'const_quadratic'
 
   % call the manufacturer to get MMS problem and solution
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
