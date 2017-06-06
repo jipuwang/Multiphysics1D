@@ -4,7 +4,7 @@
     % Manufactured source
 function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
           T_MMS_j,T_L,T_R,q_MMS_j]=...
-          manufacturer_linear_or_noFB(J,N,Tau,mat,assumedSoln,fbType)
+          manufacturer(J,N,Tau,mat,assumedSoln,fbType)
   % input parameters
   if ~exist('J','var')
     J=5*2;%*2%*2*2*2*2*2*2*2*2
@@ -29,9 +29,12 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   end
   if ~exist('hasFeedback','var')
     assumedSoln='sine_sine';
+%     assumedSoln='const_quadratic');
   end
   if ~exist('fbType','var')
     fbType='linear';
+%     fbType='noFeedback';
+%     fbType='sqareRoot';
   end
   % Material
   Sig_t_j=mat.Sig_t_j;
