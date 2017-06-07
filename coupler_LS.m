@@ -94,7 +94,7 @@ function [phi0_j,T_j]=...
         T0=50;
         gamma_coeff=0.004;
         mat.Sig_gamma_j=Sig_gamma_ref_j+gamma_coeff*(T_j-T0); 
-      case 'squareRoot'
+      case 'squareRootPlus1'
         T0=50;
         mat.Sig_gamma_j=Sig_gamma_ref_j.*sqrt(T0./(T_j+1));
     end
