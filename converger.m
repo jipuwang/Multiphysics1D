@@ -18,7 +18,7 @@ refinementRatio=2;
 Tau=10; 
 
 % Case configure options
-fbType='squareRootPlus1'; % options: 'noFeedback','linear','squareRootPlus1'
+fbType='noFeedback'; % options: 'noFeedback','linear','squareRootPlus1'
 assumedSoln='sine_sine'; % options: 'const_quadratic','sine_sine'
 
 error_phi0_n=zeros(nGrids,1);
@@ -53,23 +53,24 @@ for iGrid=1:nGrids
   error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana,2)/sqrt(J);
   error_T_n(iGrid)=norm(T_j-T_j_ana,2)/sqrt(J);
   
-  x=linspace(0,10,J);
-  figure(67); clf; hold on;
-  if iGrid==1
-    % title('scalar flux');
-    xlabel('mesh size [cm]');
-    ylabel('scalar flux');
-  end
-  % Plot the solution
-  plot(x,phi0_j,'-*');
-  
-  figure(68); clf; hold on;
-  if iGrid==1
-    % title('temperature');
-    xlabel('mesh size [cm]');
-    ylabel('temperature');
-  end
-  plot(x,T_j,'-o');
+%   %% Plot the solution over grid refinements
+%   x=linspace(0,10,J);
+%   figure(67); clf; hold on;
+%   if iGrid==1
+%     % title('scalar flux');
+%     xlabel('mesh size [cm]');
+%     ylabel('scalar flux');
+%   end
+%   % Plot the solution
+%   plot(x,phi0_j,'-*');
+%   
+%   figure(68); clf; hold on;
+%   if iGrid==1
+%     % title('temperature');
+%     xlabel('mesh size [cm]');
+%     ylabel('temperature');
+%   end
+%   plot(x,T_j,'-o');
 
 end
 
@@ -136,13 +137,13 @@ hold off;
 
 % Plot the solution
 scalarFlux_plot_handle=figure(13);
-plot(phi0_j);
+plot(phi0_j,'-*');
 % title('scalar flux');
 xlabel('mesh size [cm]');
 ylabel('scalar flux');
 
 temperature_plot_handle=figure(14);
-plot(T_j);
+plot(T_j,'-o');
 % title('temperature');
 xlabel('mesh size [cm]');
 ylabel('temperature');
