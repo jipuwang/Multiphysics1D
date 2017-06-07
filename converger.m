@@ -18,8 +18,8 @@ refinementRatio=2;
 Tau=10; 
 
 % Case configure options
-fbType='linear'; % options: 'noFeedback','linear','squareRoot'
-assumedSoln='const_quadratic'; % options: 'const_quadratic','sine_sine'
+fbType='squareRoot'; % options: 'noFeedback','linear','squareRoot'
+assumedSoln='sine_sine'; % options: 'const_quadratic','sine_sine'
 
 error_phi0_n=zeros(nGrids,1);
 error_T_n=zeros(nGrids,1);
@@ -41,17 +41,35 @@ for iGrid=1:nGrids
     field4,value4,field5,value5,field6,value6,field7,value7);
 
   % call the manufacturer to get MMS problem and solution
-  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
+  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n, ...
         T_j_ana,T_L,T_R,p_MMS_j]=...
-        manufacturer(J,N,Tau,mat,assumedSoln,fbType);
+        manufacturer_LS(J,N,Tau,mat,assumedSoln,fbType);
 
   % call the coupler to solve the above manufactured problem
-  [phi0_j,T_j]=coupler(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
+  [phi0_j,T_j]=coupler_LS(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n, ...
               T_L,T_R,p_MMS_j,fbType);
   
   % Calculate the error compared to manufactured solution
   error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana,2)/sqrt(J);
   error_T_n(iGrid)=norm(T_j-T_j_ana,2)/sqrt(J);
+  
+  x=linspace(0,10,J);
+  figure(67); clf; hold on;
+  if iGrid==1
+    % title('scalar flux');
+    xlabel('mesh size [cm]');
+    ylabel('scalar flux');
+  end
+  % Plot the solution
+  plot(x,phi0_j,'-*');
+  
+  figure(68); clf; hold on;
+  if iGrid==1
+    % title('temperature');
+    xlabel('mesh size [cm]');
+    ylabel('temperature');
+  end
+  plot(x,T_j,'-o');
 
 end
 
@@ -139,9 +157,9 @@ T_RMS_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'T_RMS'];
 phi0_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'phi0'];
 T_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'T'];
 
-savefig(scalarFluxErrorRMS_plot_handle,phi0_RMS_fn)
-savefig(temperatureErrorRM_plot_handle,T_RMS_fn)
-savefig(scalarFlux_plot_handle,phi0_fn)
-savefig(temperature_plot_handle,T_fn)
+% savefig(scalarFluxErrorRMS_plot_handle,phi0_RMS_fn)
+% savefig(temperatureErrorRM_plot_handle,T_RMS_fn)
+% savefig(scalarFlux_plot_handle,phi0_fn)
+% savefig(temperature_plot_handle,T_fn)
 
 aa=0.0;

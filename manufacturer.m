@@ -94,8 +94,6 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     Sig_t_j=Sig_ss_j+Sig_gamma_j+Sig_f_j;  
   end
   
-
-  
   %% For MoC MMS solution and problem
   % Boundary condition and source
   % psi expression evaluated at x=0
@@ -116,9 +114,9 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     x_L=(j-1)*h;x_R=j*h;
     psi_MMS_j(j)=1/h*integral(psi_MMS,x_L,x_R);
     phi0_MMS_j(j)=2.0*psi_MMS_j(j);
-    psi_MMS_Diff_j(j)= 1/h*integral(psi_MMS_Diff,x_L,x_R);
+    psi_MMS_Diff_j(j)=1/h*integral(psi_MMS_Diff,x_L,x_R);
     for n=1:N
-    Q_MMS_j_n(j,n)=mu_n(n)* psi_MMS_Diff_j(j) +Sig_t_j(j)*psi_MMS_j(j) ...
+    Q_MMS_j_n(j,n)=mu_n(n)*psi_MMS_Diff_j(j) +Sig_t_j(j)*psi_MMS_j(j) ...
       -(Sig_ss_j(j)+nuSig_f_j(j))*0.5* phi0_MMS_j(j);
     end % n
   end % j
