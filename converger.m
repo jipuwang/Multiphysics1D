@@ -19,7 +19,7 @@ Tau=10;
 
 % Case configure options
 fbType='noFeedback'; % options: 'noFeedback','linear','squareRootPlus1'
-assumedSoln='sine_sine'; % options: 'const_quadratic','sine_sine'
+assumedSoln='sqrtPlus1'; % options: 'const_quadratic','sine_sine','sqrtPlus1"
 
 error_phi0_n=zeros(nGrids,1);
 error_T_n=zeros(nGrids,1);
