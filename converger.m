@@ -169,10 +169,10 @@ xlabel('mesh size [cm]');
 ylabel('temperature');
 
 % Save the plots
-phi0_RMS_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'phi0_RMS'];
-T_RMS_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'T_RMS'];
-phi0_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'phi0'];
-T_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'T'];
+phi0_RMS_fn=char(strcat('Soln_',assumedSoln,'_fbType_',fbType,'_','phi0_RMS'));
+T_RMS_fn=char(strcat('Soln_',assumedSoln,'_fbType_',fbType,'_','T_RMS'));
+phi0_fn=char(strcat('Soln_',assumedSoln,'_fbType_',fbType,'_','phi0'));
+T_fn=char(strcat('Soln_',assumedSoln,'_fbType_',fbType,'_','T'));
 
 savefig(scalarFluxErrorRMS_plot_handle,phi0_RMS_fn)
 savefig(temperatureErrorRM_plot_handle,T_RMS_fn)
