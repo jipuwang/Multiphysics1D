@@ -10,20 +10,20 @@
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
 
-clear;
+% clear;
 nGrids=6;%10;%8;
 refinementRatio=2;
 
 % Geometry
 Tau=10; 
 
-% Case configure options
-% fbType options: 'noFeedback','linear','squareRootPlus1'
-fbType='noFeedback'; 
-% AssumedSoln options: 'const_quadratic','sine_sine','sqrtPlus1_quadratic"
-assumedSoln='sqrtPlus1_quadratic'; 
-% MoC solver options: 'flat_source','linear_source'
-mocSrc='flat_source';
+% % Case configure options
+% % fbType options: 'noFeedback','linear','squareRootPlus1'
+% fbType='noFeedback'; 
+% % AssumedSoln options: 'const_quadratic','sine_sine','sqrtPlus1_quadratic"
+% assumedSoln='sqrtPlus1_quadratic'; 
+% % MoC solver options: 'flat_source','linear_source'
+% mocSrc='flat_source';
 
 error_phi0_n=zeros(nGrids,1);
 error_T_n=zeros(nGrids,1);
@@ -100,6 +100,10 @@ for j=1:nGrids-1
     log(gridMeshSize_n(j)/gridMeshSize_n(j+1));
 end
 
+% Display the problem description
+display('=================');
+display(fbType);
+display(assumedSoln);
 % Display the result
 error_phi0_n
 error_T_n
@@ -164,19 +168,15 @@ plot(T_j,'-o');
 xlabel('mesh size [cm]');
 ylabel('temperature');
 
-% Display the problem description
-display(fbType);
-display(assumedSoln);
-
 % Save the plots
 phi0_RMS_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'phi0_RMS'];
 T_RMS_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'T_RMS'];
 phi0_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'phi0'];
 T_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'T'];
 
-savefig(scalarFluxErrorRMS_plot_handle,phi0_RMS_fn)
-savefig(temperatureErrorRM_plot_handle,T_RMS_fn)
-savefig(scalarFlux_plot_handle,phi0_fn)
-savefig(temperature_plot_handle,T_fn)
+% savefig(scalarFluxErrorRMS_plot_handle,phi0_RMS_fn)
+% savefig(temperatureErrorRM_plot_handle,T_RMS_fn)
+% savefig(scalarFlux_plot_handle,phi0_fn)
+% savefig(temperature_plot_handle,T_fn)
 
 aa=0.0;

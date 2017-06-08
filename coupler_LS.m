@@ -67,7 +67,7 @@ function [phi0_j,T_j]=...
     %% Call the MoC module to get the flux
     phi0_j=MoC_LS_module(J,N,Tau,mat,...
              psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n);
-    error_phi=norm(phi0_j-phi0_j_old)/sqrt(J)
+    error_phi=norm(phi0_j-phi0_j_old)/sqrt(J);
     phi0_j_old=phi0_j;
 
     %% The coupling
@@ -76,7 +76,7 @@ function [phi0_j,T_j]=...
 
     %% Call the heat conduction module to get the temperature
     T_j=heat_cond_module(J,Tau,mat,T_L,T_R,pTriplePrime_j,p_MMS_j);
-    error_T=norm(T_j-T_j_old)/sqrt(J)
+    error_T=norm(T_j-T_j_old)/sqrt(J);
     T_j_old=T_j;
 
     %% check convergence
