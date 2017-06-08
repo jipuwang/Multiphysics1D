@@ -56,7 +56,7 @@ function [phi0_j]=MoC_module(J,N,Tau,mat,...
   
   % Default variables, can be customized. 
   maxIterate=2000;
-  epsilon_phi=1e-10;
+  epsilon_phi0=1e-12;
   delta=1E-13;
   [mu_n,weight_n]=lgwt(N,-1,1); mu_n=flipud(mu_n);
   
@@ -104,7 +104,7 @@ function [phi0_j]=MoC_module(J,N,Tau,mat,...
     % test for convergence
 %     error=norm(phi0_j_new-phi0_j_old);
     error=max(abs(phi0_j_new-phi0_j_old)./(phi0_j_new+delta));
-    if error<epsilon_phi
+    if error<epsilon_phi0
       break;
     end
     phi0_j_old=phi0_j_new;
