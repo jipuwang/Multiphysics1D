@@ -18,8 +18,17 @@ refinementRatio=2;
 Tau=10; 
 
 % Case configure options
-fbType='noFeedback'; % options: 'noFeedback','linear','squareRootPlus1'
-assumedSoln='sqrtPlus1_quadratic'; % options: 'const_quadratic','sine_sine','sqrtPlus1_quadratic"
+% fbType options: 'noFeedback','linear','squareRootPlus1'
+fbType='noFeedback'; 
+% AssumedSoln options: 'const_quadratic','sine_sine','sqrtPlus1_quadratic"
+assumedSoln='sqrtPlus1_quadratic'; 
+% MoC solver options: 'flat_source','linear_source'
+mocSrc='flat_source';
+% Define function handles 
+if strcmp(mocSrc,'linear_source')
+  manufacturer=manufacturer_LS;
+  coupler=coupler_LS;
+end
 
 error_phi0_n=zeros(nGrids,1);
 error_T_n=zeros(nGrids,1);
@@ -43,10 +52,10 @@ for iGrid=1:nGrids
   % call the manufacturer to get MMS problem and solution
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n, ...
         T_j_ana,T_L,T_R,p_MMS_j]=...
-        manufacturer_LS(J,N,Tau,mat,assumedSoln,fbType);
+        manufacturer(J,N,Tau,mat,assumedSoln,fbType);
 
   % call the coupler to solve the above manufactured problem
-  [phi0_j,T_j]=coupler_LS(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n, ...
+  [phi0_j,T_j]=coupler(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n, ...
               T_L,T_R,p_MMS_j,fbType);
   
   % Calculate the error compared to manufactured solution
