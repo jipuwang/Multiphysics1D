@@ -24,11 +24,6 @@ fbType='noFeedback';
 assumedSoln='sqrtPlus1_quadratic'; 
 % MoC solver options: 'flat_source','linear_source'
 mocSrc='flat_source';
-% Define function handles 
-if strcmp(mocSrc,'linear_source')
-  manufacturer=manufacturer_LS;
-  coupler=coupler_LS;
-end
 
 error_phi0_n=zeros(nGrids,1);
 error_T_n=zeros(nGrids,1);
@@ -49,14 +44,26 @@ for iGrid=1:nGrids
   mat = struct(field1,value1,field2,value2,field3,value3,... 
     field4,value4,field5,value5,field6,value6,field7,value7);
 
-  % call the manufacturer to get MMS problem and solution
-  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n, ...
-        T_j_ana,T_L,T_R,p_MMS_j]=...
-        manufacturer(J,N,Tau,mat,assumedSoln,fbType);
+  % Define function handles 
+  if strcmp(mocSrc,'linear_source')
+    % call the manufacturer to get MMS problem and solution
+    [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n, ...
+          T_j_ana,T_L,T_R,p_MMS_j]=...
+          manufacturer_LS(J,N,Tau,mat,assumedSoln,fbType);
 
-  % call the coupler to solve the above manufactured problem
-  [phi0_j,T_j]=coupler(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n, ...
-              T_L,T_R,p_MMS_j,fbType);
+    % call the coupler to solve the above manufactured problem
+    [phi0_j,T_j]=coupler_LS(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n, ...
+                T_L,T_R,p_MMS_j,fbType);
+  else
+    [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n, ...
+          T_j_ana,T_L,T_R,p_MMS_j]=...
+          manufacturer(J,N,Tau,mat,assumedSoln,fbType);
+
+    % call the coupler to solve the above manufactured problem
+    [phi0_j,T_j]=coupler(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n, ...
+                T_L,T_R,p_MMS_j,fbType);
+  end
+
   
   % Calculate the error compared to manufactured solution
   error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana,2)/sqrt(J);
@@ -167,9 +174,9 @@ T_RMS_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'T_RMS'];
 phi0_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'phi0'];
 T_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'T'];
 
-% savefig(scalarFluxErrorRMS_plot_handle,phi0_RMS_fn)
-% savefig(temperatureErrorRM_plot_handle,T_RMS_fn)
-% savefig(scalarFlux_plot_handle,phi0_fn)
-% savefig(temperature_plot_handle,T_fn)
+savefig(scalarFluxErrorRMS_plot_handle,phi0_RMS_fn)
+savefig(temperatureErrorRM_plot_handle,T_RMS_fn)
+savefig(scalarFlux_plot_handle,phi0_fn)
+savefig(temperature_plot_handle,T_fn)
 
 aa=0.0;
