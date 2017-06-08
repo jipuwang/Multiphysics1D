@@ -149,17 +149,17 @@ for iIterate=1:maxIterate
   end
   
   % test for convergence
-  error=norm(phi0_new_j-phi0_old_j)
+  error=norm(phi0_new_j-phi0_old_j);
   if error<epsilon_phi0
     break;
   end
   phi0_old_j=phi0_new_j;
   phi0_old_hat_j=phi0_hat_new_j;
 end
-error
+% error
 % phi_j_old=phi_j_new;
 phi0_new_j=phi0_new_j';
-display(iIterate);
+% display(iIterate);
 % figure(19);
 % plot(phi0_new_j,'*-')
 % openvar('phi_j_new')
