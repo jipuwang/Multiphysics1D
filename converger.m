@@ -174,9 +174,9 @@ T_RMS_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'T_RMS'];
 phi0_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'phi0'];
 T_fn=['Soln_' assumedSoln '_fbType_' fbType '_' 'T'];
 
-% savefig(scalarFluxErrorRMS_plot_handle,phi0_RMS_fn)
-% savefig(temperatureErrorRM_plot_handle,T_RMS_fn)
-% savefig(scalarFlux_plot_handle,phi0_fn)
-% savefig(temperature_plot_handle,T_fn)
+savefig(scalarFluxErrorRMS_plot_handle,phi0_RMS_fn)
+savefig(temperatureErrorRM_plot_handle,T_RMS_fn)
+savefig(scalarFlux_plot_handle,phi0_fn)
+savefig(temperature_plot_handle,T_fn)
 
 aa=0.0;
