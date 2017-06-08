@@ -59,8 +59,7 @@ function [phi0_j]=MoC_LS_module(J,N,Tau,mat,...
   
   % Default variables, can be customized. 
   maxIterate=2000;
-  epsilon_phi=1e-10;
-  delta=1E-13;
+  epsilon_phi0=1e-12;
   [mu_n,weight_n]=lgwt(N,-1,1); mu_n=flipud(mu_n);
   
   h_j=ones(J,1)*Tau/J;
@@ -84,9 +83,8 @@ q_sm_j_n=zeros(J,N);
 Q_x_hat_j_n=zeros(J,N);
 q_hat_j_n=zeros(J,N);
 q_sm_hat_j_n=zeros(J,N);
-%% temporary
-Q_MMS_hat_j_n=zeros(J,N);
-%%
+
+%% Inner iteration to converge scattering source
 for iIterate=1:maxIterate
   for j=1:J
     for n=1:N
@@ -152,7 +150,7 @@ for iIterate=1:maxIterate
   
   % test for convergence
   error=norm(phi0_new_j-phi0_old_j)
-  if error<epsilon_phi
+  if error<epsilon_phi0
     break;
   end
   phi0_old_j=phi0_new_j;
