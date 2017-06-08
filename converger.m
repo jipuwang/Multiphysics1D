@@ -20,10 +20,10 @@ Tau=10;
 % % Case configure options
 % % fbType options: 'noFeedback','linear','squareRootPlus1'
 % fbType='noFeedback'; 
-% % AssumedSoln options: 'const_quadratic','sine_sine','sqrtPlus1_quadratic"
-% assumedSoln='sqrtPlus1_quadratic'; 
-% % MoC solver options: 'flat_source','linear_source'
+% % mocSrc options: 'flat_source','linear_source'
 % mocSrc='flat_source';
+% % assumedSoln options: 'const_quadratic','sine_sine','sqrtPlus1_quadratic"
+% assumedSoln='sqrtPlus1_quadratic'; 
 
 error_phi0_n=zeros(nGrids,1);
 error_T_n=zeros(nGrids,1);
