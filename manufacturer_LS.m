@@ -28,7 +28,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
       field4,value4,field5,value5,field6,value6,field7,value7);
   end
   if ~exist('assumedSoln','var')
-    assumedSoln='const_quadratic';
+    assumedSoln='sqrtPlus1_quadratic';
 %     assumedSoln='const_quadratic');
   end
   if ~exist('fbType','var')
@@ -64,6 +64,13 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
       % Manufactured neutronics solution \psi(x,\mu)=1.0, 0<x<Tau
       psi_MMS =@(x) 1.0+x*0.0;
       psi_MMS_Diff =@(x) x*0.0;
+      % Manufactured TH solution T(x)=x.^2, 0<x<Tau
+      T_MMS =@(x) x.^2;
+      T_MMS_xx =@(x) 2.0+x*0.0;
+    case('sqrtPlus1_quadratic')
+      % Manufactured neutronics solution \psi(x,\mu)=1.0, 0<x<Tau
+      psi_MMS =@(x) sqrt(x+1);
+      psi_MMS_Diff =@(x) 0.5./sqrt(x+1);
       % Manufactured TH solution T(x)=x.^2, 0<x<Tau
       T_MMS =@(x) x.^2;
       T_MMS_xx =@(x) 2.0+x*0.0;
