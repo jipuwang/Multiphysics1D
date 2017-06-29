@@ -29,7 +29,6 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   end
   if ~exist('assumedSoln','var')
     assumedSoln='sine_sine';
-%     assumedSoln='const_quadratic');
   end
   if ~exist('fbType','var')
     fbType='linear';
@@ -51,7 +50,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   %% Manufactured Solutions for both fields
   % They need to be pre-defined here due to temperature dependence on the
   % xs. 
-  % Options includes: sine_sine, const_quadratic, etc.
+  % Options includes: sine_sine, const_cubic, sqrtPlus1_quadratic, etc.
   switch(assumedSoln)
     case('sine_sine')
       % Manufactured neutronics solution \psi(x,\mu)=sin(pi*x/Tau), 0<x<Tau
