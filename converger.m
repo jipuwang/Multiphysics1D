@@ -100,83 +100,88 @@ for j=1:nGrids-1
     log(gridMeshSize_n(j)/gridMeshSize_n(j+1));
 end
 
+% %% Visualize the results
+% orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
+% 
+% scalarFluxErrorRMS_plot_handle=figure(11);
+% loglog(gridMeshSize_n,error_phi0_n,'*');
+% % title('scalar flux error convergence');
+% xlabel('mesh size [cm]');
+% ylabel('scalar flux error RMS');
+% 
+% hold on;
+% orderGuess=round(order_phi_nMinus1(end));
+% errorStt=error_phi0_n(end)*refinementRatio^(orderGuess*(nGrids-1));
+% firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
+% secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
+% thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
+% fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
+% loglog(orderPlotGrid,firstOrder,'--');
+% loglog(orderPlotGrid,secondOrder,'--');
+% loglog(orderPlotGrid,thirdOrder,'--');
+% loglog(orderPlotGrid,fourthOrder,'--');
+% legend('scalar flux error','1st Order','2nd Order',...
+%   '3rd Order','4th Order','location','best');
+% hold off;
+% 
+% temperatureErrorRM_plot_handle=figure(12);
+% loglog(gridMeshSize_n,error_T_n,'*');
+% % title('temperature error convergence');
+% xlabel('mesh size [cm]');
+% ylabel('temperature error RMS');
+% 
+% hold on;
+% orderGuess=round(order_T_nMinus1(end));
+% errorStt=error_T_n(end)*refinementRatio^(orderGuess*(nGrids-1));
+% firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
+% secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
+% thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
+% fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
+% loglog(orderPlotGrid,firstOrder,'--');
+% loglog(orderPlotGrid,secondOrder,'--');
+% loglog(orderPlotGrid,thirdOrder,'--');
+% loglog(orderPlotGrid,fourthOrder,'--');
+% legend('temperature error','1st Order','2nd Order',...
+%   '3rd Order','4th Order','location','best');
+% hold off;
+% 
+% % Plot the solution
+% scalarFlux_plot_handle=figure(13);r
+% plot(phi0_j,'-*');
+% % title('scalar flux');
+% xlabel('mesh size [cm]');
+% ylabel('scalar flux');
+% 
+% temperature_plot_handle=figure(14);
+% plot(T_j,'-o');
+% % title('temperature');
+% xlabel('mesh size [cm]');
+% ylabel('temperature');
+% 
+% Save the plots
+phi0_RMS_fn=char(strcat('fbType_',fbType,'_mocSrc_',mocSrc,'_soln_',assumedSoln,'_','phi0_RMS'));
+T_RMS_fn=char(strcat('fbType_',fbType,'_mocSrc_',mocSrc,'_soln_',assumedSoln,'_','T_RMS'));
+phi0_fn=char(strcat('fbType_',fbType,'_mocSrc_',mocSrc,'_soln_',assumedSoln,'_','phi0'));
+T_fn=char(strcat('fbType_',fbType,'_mocSrc_',mocSrc,'_soln_',assumedSoln,'_','T'));
+% 
+% savefig(scalarFluxErrorRMS_plot_handle,phi0_RMS_fn)
+% savefig(temperatureErrorRM_plot_handle,T_RMS_fn)
+% savefig(scalarFlux_plot_handle,phi0_fn)
+% savefig(temperature_plot_handle,T_fn)
 % Display the problem description
-display('=================');
-display(fbType);
-display(assumedSoln);
-% Display the result
+
+disp '=================';
+% display(fbType);
+% display(mocSrc)
+% display(assumedSoln);
+% % Display the result
 error_phi0_n
 error_T_n
 order_phi_nMinus1
 order_T_nMinus1
+display(char(strcat('fbType_',fbType,'_mocSrc_',mocSrc,'_soln_',assumedSoln)));
+display(char(num2str(order_phi_nMinus1(end))));
+display(char(num2str(order_T_nMinus1(end))));
 
-% Visualize the results
-orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
 
-scalarFluxErrorRMS_plot_handle=figure(11);
-loglog(gridMeshSize_n,error_phi0_n,'*');
-% title('scalar flux error convergence');
-xlabel('mesh size [cm]');
-ylabel('scalar flux error RMS');
-
-hold on;
-orderGuess=round(order_phi_nMinus1(end));
-errorStt=error_phi0_n(end)*refinementRatio^(orderGuess*(nGrids-1));
-firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
-secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
-thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
-fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
-loglog(orderPlotGrid,firstOrder,'--');
-loglog(orderPlotGrid,secondOrder,'--');
-loglog(orderPlotGrid,thirdOrder,'--');
-loglog(orderPlotGrid,fourthOrder,'--');
-legend('scalar flux error','1st Order','2nd Order',...
-  '3rd Order','4th Order','location','best');
-hold off;
-
-temperatureErrorRM_plot_handle=figure(12);
-loglog(gridMeshSize_n,error_T_n,'*');
-% title('temperature error convergence');
-xlabel('mesh size [cm]');
-ylabel('temperature error RMS');
-
-hold on;
-orderGuess=round(order_T_nMinus1(end));
-errorStt=error_T_n(end)*refinementRatio^(orderGuess*(nGrids-1));
-firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
-secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
-thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
-fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
-loglog(orderPlotGrid,firstOrder,'--');
-loglog(orderPlotGrid,secondOrder,'--');
-loglog(orderPlotGrid,thirdOrder,'--');
-loglog(orderPlotGrid,fourthOrder,'--');
-legend('temperature error','1st Order','2nd Order',...
-  '3rd Order','4th Order','location','best');
-hold off;
-
-% Plot the solution
-scalarFlux_plot_handle=figure(13);
-plot(phi0_j,'-*');
-% title('scalar flux');
-xlabel('mesh size [cm]');
-ylabel('scalar flux');
-
-temperature_plot_handle=figure(14);
-plot(T_j,'-o');
-% title('temperature');
-xlabel('mesh size [cm]');
-ylabel('temperature');
-
-% Save the plots
-phi0_RMS_fn=char(strcat('Soln_',assumedSoln,'_fbType_',fbType,'_','phi0_RMS'));
-T_RMS_fn=char(strcat('Soln_',assumedSoln,'_fbType_',fbType,'_','T_RMS'));
-phi0_fn=char(strcat('Soln_',assumedSoln,'_fbType_',fbType,'_','phi0'));
-T_fn=char(strcat('Soln_',assumedSoln,'_fbType_',fbType,'_','T'));
-
-savefig(scalarFluxErrorRMS_plot_handle,phi0_RMS_fn)
-savefig(temperatureErrorRM_plot_handle,T_RMS_fn)
-savefig(scalarFlux_plot_handle,phi0_fn)
-savefig(temperature_plot_handle,T_fn)
-
-aa=0.0;
+% aa=0.0;
