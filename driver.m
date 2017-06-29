@@ -1,7 +1,7 @@
 % Driver
 % Case configure options
 % fbType options: 'noFeedback','linear','squareRootPlus1'
-% assumedSoln options: 'const_quadratic','sine_sine','sqrtPlus1_quadratic'
+% assumedSoln options: 'const_cubic','sine_sine','sqrtPlus1_quadratic'
 % mocSrc options: 'flat_source','linear_source'
 delete diary.txt;
 diary('diary.txt')
@@ -9,7 +9,7 @@ A={'noFeedback','linear','squareRootPlus1'};
 fbTypeS=string(A);
 A={'flat_source','linear_source'};
 mocSrcS=string(A);
-A={'const_quadratic','sine_sine','sqrtPlus1_quadratic'};
+A={'const_cubic','sine_sine','sqrtPlus1_quadratic'};
 assumedSolnS=string(A);
 
 for i_fbType=1:size(fbTypeS,2)
