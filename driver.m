@@ -25,3 +25,6 @@ for i_fbType=1:size(fbTypeS,2)
     end
   end
 end
+
+close all;
+diary off;
