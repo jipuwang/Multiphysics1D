@@ -60,13 +60,13 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
       % Manufactured TH solution T(x)=sin(pi*x/Tau), 0<x<Tau
       T_MMS =@(x) sin(pi*x/Tau);
       T_MMS_xx =@(x) -(pi*pi/Tau/Tau)*sin(pi*x/Tau);
-    case('const_quadratic')
+    case('const_cubic')
       % Manufactured neutronics solution \psi(x,\mu)=1.0, 0<x<Tau
       psi_MMS =@(x) 1.0+x*0.0;
       psi_MMS_Diff =@(x) x*0.0;
-      % Manufactured TH solution T(x)=x.^2, 0<x<Tau
-      T_MMS =@(x) x.^2;
-      T_MMS_xx =@(x) 2.0+x*0.0;
+      % Manufactured TH solution T(x)=x.^3, 0<x<Tau
+      T_MMS =@(x) x.^3;
+      T_MMS_xx =@(x) x*6.0;
     case('sqrtPlus1_quadratic')
       % Manufactured neutronics solution \psi(x,\mu)=1.0, 0<x<Tau
       psi_MMS =@(x) sqrt(x+1);
