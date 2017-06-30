@@ -1,0 +1,3 @@
+Set up regression tests so I don't break the code. 
+And the code needs to pass the tests before being commited/pushed. 
+
