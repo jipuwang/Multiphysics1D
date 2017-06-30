@@ -88,7 +88,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
         Sig_gamma =@(x) mat.Sig_gamma_j(1)+gamma_coeff*(T_MMS(x)-T0);
       case 'squareRootPlus1'
         T0=50;
-        Sig_gamma =@(x) mat.Sig_gamma_j(1)*sqrt(T0./(T_MMS(x)+1));
+        Sig_gamma =@(x) mat.Sig_gamma_j(1)*sqrt((T0+1)./(T_MMS(x)+1));
     end
     Sig_gammaDotpsi_MMS =@(x) Sig_gamma(x).*psi_MMS(x);
     % Updated capture xs
