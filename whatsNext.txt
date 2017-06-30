@@ -1,3 +1,4 @@
-Set up regression tests so I don't break the code. 
-And the code needs to pass the tests before being commited/pushed. 
+1. Set up regression tests so I don't break the code. And the code needs to pass the tests before being committed/pushed. 
+2. The manufacturer does not need to calculate the xs to get the cell-averaged MMS source.  This can be simplified. 
+3. 
 
