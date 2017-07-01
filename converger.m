@@ -9,7 +9,7 @@
 % the problem description. 
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
-
+function [order_phi,order_T]=converger(fbType,mocSrc,assumedSoln)
 % clear;
 nGrids=6;%10;%8;
 refinementRatio=2;
@@ -183,5 +183,8 @@ display(char(strcat('fbType_',fbType,'_mocSrc_',mocSrc,'_soln_',assumedSoln)));
 display(char(num2str(order_phi_nMinus1(end))));
 display(char(num2str(order_T_nMinus1(end))));
 
+order_phi=order_phi_nMinus1(end);
+order_T=order_T_nMinus1(end);
 
 % aa=0.0;
+end
