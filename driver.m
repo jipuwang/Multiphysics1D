@@ -15,12 +15,12 @@ assumedSolnS=string(A);
 
 % Store the order of accuracy, it could have just been a constant
 nCombinations=size(fbTypeS,2)*size(mocSrcS,2)*size(assumedSolnS,2);
-order_phi_ensemble=ones(nCombinations,1);
-order_T_ensemble=ones(nCombinations,1);
+order_phi_ensemble=zeros(nCombinations,1);
+order_T_ensemble=zeros(nCombinations,1);
 iCombination=0;
 
-for i_fbType=1:size(fbTypeS,2)
-  for j_mocSrc=1:size(mocSrcS,2)
+for i_fbType=3:size(fbTypeS,2)
+  for j_mocSrc=2:size(mocSrcS,2)
     for k_assumedSoln=1:size(assumedSolnS,2)
 %       close all;
       fbType=fbTypeS(i_fbType);
