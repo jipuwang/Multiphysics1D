@@ -170,18 +170,19 @@ T_fn=char(strcat('fbType_',fbType,'_mocSrc_',mocSrc,'_soln_',assumedSoln,'_','T'
 % savefig(temperature_plot_handle,T_fn)
 % Display the problem description
 
-disp '=================';
-% display(fbType);
-% display(mocSrc)
-% display(assumedSoln);
+% disp '=================';
+% % display(fbType);
+% % display(mocSrc)
+% % display(assumedSoln);
 % % Display the result
-error_phi0_n
-error_T_n
-order_phi_nMinus1
-order_T_nMinus1
-display(char(strcat('fbType_',fbType,'_mocSrc_',mocSrc,'_soln_',assumedSoln)));
-display(char(num2str(order_phi_nMinus1(end))));
-display(char(num2str(order_T_nMinus1(end))));
+% error_phi0_n
+% error_T_n
+% order_phi_nMinus1
+% order_T_nMinus1
+% display(char(strcat('fbType_',fbType,'_mocSrc_',mocSrc,'_soln_',assumedSoln)));
+% display(char(num2str(order_phi_nMinus1(end))));
+% display(char(num2str(order_T_nMinus1(end))));
+
 
 order_phi=order_phi_nMinus1(end);
 order_T=order_T_nMinus1(end);
