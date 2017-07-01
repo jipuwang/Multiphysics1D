@@ -1,7 +1,10 @@
-1. The manufacturer does not need to calculate the xs to get the cell-averaged MMS source.  This can be simplified. 
+To do:
+1.
 2. 
 
 Finished:
 1. Set up regression tests so I don't break the code. And the code needs to pass the tests before being committed/pushed. 
 
-
+Removed from to do:
+1. The manufacturer does not need to calculate the xs to get the cell-averaged MMS source.  This can be simplified. 
+It's decided that this is only done for FS case, for LS case, to calculate the first spatial source moments, it's mroe complicated, and it's not quite worth it.  We have to generate a angle-dependence quantity anyways.  So why not keep this angle dependence in the xs, but this is only a intermediate variable. 
