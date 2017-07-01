@@ -19,8 +19,8 @@ order_phi_ensemble=zeros(nCombinations,1);
 order_T_ensemble=zeros(nCombinations,1);
 iCombination=0;
 
-for i_fbType=3:size(fbTypeS,2)
-  for j_mocSrc=2:size(mocSrcS,2)
+for i_fbType=1:size(fbTypeS,2)
+  for j_mocSrc=1:size(mocSrcS,2)
     for k_assumedSoln=1:size(assumedSolnS,2)
 %       close all;
       fbType=fbTypeS(i_fbType);
@@ -36,4 +36,24 @@ end
 close all;
 diary off;
 
-aa=1;
+order_phi_gold=[100;2;2;100;4;4;2;2;2;2;2;2;2;2;2;2;2;2;];
+order_T_gold=[2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;2;];
+
+regressionTestPasses=true;
+for iCombination=1:nCombinations
+  if order_phi_gold(iCombination)~=100 %100 is considered an automatic pass
+    if abs(order_phi_ensemble(iCombination)-order_phi_gold(iCombination))>0.1
+      regressionTestPasses=false;
+    end
+    if abs(order_T_ensemble(iCombination)-order_T_gold(iCombination))>0.1
+      regressionTestPasses=false;
+    end
+  end
+end
+
+if regressionTestPasses==true
+  display 'All Tests Passed'
+else
+  display 'Test Failed'
+end
+    
