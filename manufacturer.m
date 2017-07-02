@@ -89,15 +89,17 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
       T0=50;
       Sig_gamma =@(x) mat.Sig_gamma_j(1)*sqrt((T0+1)./(T_MMS(x)+1));
   end
-  Sig_tDotpsi_MMS =@(x) (Sig_ss_j(1)+Sig_f_j(1)+Sig_gamma(x)).*psi_MMS(x);
-  % Updated capture xs % Could have angular dependence!!!
-  % You do not need to update xs, use the term Sig_gammaDotpsi_MMS
-  % wholistically to avoid angularly dependent xs. 
-  Sig_tDotpsi_MMS_j=zeros(J,1);
-  for j=1:J
-    x_L=(j-1)*h;x_R=j*h;
-    Sig_tDotpsi_MMS_j(j)=integral(Sig_tDotpsi_MMS,x_L,x_R)/h;
-  end
+  
+  Sig_ss =@(x) Sig_ss_j(1)+x*0;
+  Sig_f =@(x) Sig_f_j(1)+x*0;
+  nuSig_f =@(x) nuSig_f_j(1)+x*0;
+  Sig_t =@(x) Sig_ss(x)+Sig_f(x)+Sig_gamma(x);
+  
+  phi0_MMS =@(x) 2*psi_MMS(x);
+  % MMS source: mu_n * derivative(psi_MMS) +Sig_t* psi_MMS ...
+  % -(Sig_ss+nuSig_f)*0.5*phi0_MMS;
+  Q_MMS =@(x,mu) mu*psi_MMS_Diff(x) +Sig_t(x).*psi_MMS(x) ...
+    -(Sig_ss(x)+nuSig_f(x))*0.5.*phi0_MMS(x);
   
   %% For MoC MMS solution and problem
   % Boundary condition and source
@@ -106,23 +108,15 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   % psi expression evaluated at x=Tau
   psi_b2_n=psi_MMS(Tau)*ones(N,1); % n=1:N/2 % mu<0
 
-  Q_MMS_j_n=zeros(J,N); % preallocate memory, avg'ed over tau_(j-1/2) and tau_(j+1/2)
-  % MMS source: mu_n * derivative(psi_MMS) +Sig_t* psi_MMS ...
-  % -(Sig_ss+nuSig_f)*0.5*phi0_MMS;
-
-
-  psi_MMS_j=zeros(J,1);
   phi0_MMS_j=zeros(J,1);
-  psi_MMS_Diff_j=zeros(J,1); % This is needed to build MMS source
+  Q_MMS_j_n=zeros(J,N); % preallocate memory, avg'ed over tau_(j-1/2) and tau_(j+1/2)
 
   for j=1:J
     x_L=(j-1)*h;x_R=j*h;
-    psi_MMS_j(j)=1/h*integral(psi_MMS,x_L,x_R);
-    phi0_MMS_j(j)=2.0*psi_MMS_j(j);
-    psi_MMS_Diff_j(j)=1/h*integral(psi_MMS_Diff,x_L,x_R);
+    phi0_MMS_j(j)=1/h*integral(phi0_MMS,x_L,x_R);
     for n=1:N
-    Q_MMS_j_n(j,n)=mu_n(n)*psi_MMS_Diff_j(j) +Sig_tDotpsi_MMS_j(j) ...
-      -(Sig_ss_j(j)+nuSig_f_j(j))*0.5* phi0_MMS_j(j);
+      % g = @(c) (integral(@(x) (x.^2 + c*x + 1),0,1));
+      Q_MMS_j_n(j,n)=integral(@(x) Q_MMS(x,mu_n(n)),x_L,x_R)/h;
     end % n
   end % j
   
