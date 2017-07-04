@@ -8,7 +8,7 @@
 
 function [phi0_j,T_j]=...
   coupler_LS(J,N,Tau,mat,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n, ...
-          T_L,T_R,p_MMS_j,fbType)
+          T_L,T_R,p_MMS_j,fbType,phi0_j_ana,T_j_ana)
   % input parameters
   if ~exist('J','var')
     J=10;
@@ -67,6 +67,7 @@ function [phi0_j,T_j]=...
     %% Call the MoC module to get the flux
     phi0_j=MoC_LS_module(J,N,Tau,mat,...
              psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n);
+%     phi0_j=phi0_j_ana;
     error_phi=norm(phi0_j-phi0_j_old)/sqrt(J);
     phi0_j_old=phi0_j;
 
@@ -76,12 +77,12 @@ function [phi0_j,T_j]=...
 
     %% Call the heat conduction module to get the temperature
     T_j=heat_cond_module(J,Tau,mat,T_L,T_R,pTriplePrime_j,p_MMS_j);
+%     T_j=T_j_ana;
     error_T=norm(T_j-T_j_old)/sqrt(J);
     T_j_old=T_j;
 
     %% check convergence
     if (error_phi<1e-12 && error_T<1e-12)
-      isConverged=true;
       break;
     end
     
@@ -93,6 +94,7 @@ function [phi0_j,T_j]=...
         % gamma_coeff*(T_j_new-T0) is fb.
         T0=50;
         gamma_coeff=0.004;
+%         gamma_coeff=0.000;
         mat.Sig_gamma_j=Sig_gamma_ref_j+gamma_coeff*(T_j-T0); 
       case 'squareRootPlus1'
         T0=50;
