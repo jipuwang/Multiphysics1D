@@ -20,10 +20,10 @@ Tau=10;
 % % Case configure options
 % % fbType options: 'noFeedback','linear','squareRootPlus1'
 % fbType='noFeedback'; 
-% % mocSrc options: 'flat_source','linear_source'
-% mocSrc='flat_source';
-% % assumedSoln options: 'const_quadratic','sine_sine','sqrtPlus1_quadratic"
-% assumedSoln='sqrtPlus1_quadratic'; 
+% % mocSrc options: 'flat-source','linear-source'
+% mocSrc='flat-source';
+% % assumedSoln options: 'const-quadratic','sine-sine','sqrtPlus1-quadratic"
+% assumedSoln='sqrtPlus1-quadratic'; 
 
 error_phi0_n=zeros(nGrids,1);
 error_T_n=zeros(nGrids,1);
@@ -32,7 +32,7 @@ N=16; % angular discretization, fixed not refined.
 for iGrid=1:nGrids
   J=5*refinementRatio^iGrid;
   gridMeshSize_n(iGrid)=Tau/J;
-  
+  iGrid
   % Material
   field1='Sig_t_j';          value1=ones(J,1);
   field2='Sig_ss_j';         value2=ones(J,1)*0.5;
@@ -117,10 +117,10 @@ end
 % secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
 % thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
 % fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
-% loglog(orderPlotGrid,firstOrder,'--');
-% loglog(orderPlotGrid,secondOrder,'--');
-% loglog(orderPlotGrid,thirdOrder,'--');
-% loglog(orderPlotGrid,fourthOrder,'--');
+% loglog(orderPlotGrid,firstOrder,'r--');
+% loglog(orderPlotGrid,secondOrder,'g--');
+% loglog(orderPlotGrid,thirdOrder,'b--');
+% loglog(orderPlotGrid,fourthOrder,'k--');
 % legend('scalar flux error','1st Order','2nd Order',...
 %   '3rd Order','4th Order','location','best');
 % hold off;
@@ -138,10 +138,10 @@ end
 % secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
 % thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
 % fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
-% loglog(orderPlotGrid,firstOrder,'--');
-% loglog(orderPlotGrid,secondOrder,'--');
-% loglog(orderPlotGrid,thirdOrder,'--');
-% loglog(orderPlotGrid,fourthOrder,'--');
+% loglog(orderPlotGrid,firstOrder,'r--');
+% loglog(orderPlotGrid,secondOrder,'g--');
+% loglog(orderPlotGrid,thirdOrder,'b--');
+% loglog(orderPlotGrid,fourthOrder,'k--');
 % legend('temperature error','1st Order','2nd Order',...
 %   '3rd Order','4th Order','location','best');
 % hold off;
