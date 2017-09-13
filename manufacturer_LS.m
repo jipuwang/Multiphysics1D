@@ -63,8 +63,8 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
       % Manufactured neutronics solution \psi(x,\mu)=sin(pi*x/Tau), 0<x<Tau
       psi_MMS =@(x) sin(pi*x/Tau);
       psi_MMS_Diff =@(x) pi/Tau*cos(pi*x/Tau);
-%       psi_MMS =@(x) 0.001*x.^3;
-%       psi_MMS_Diff =@(x) 0.001*3*x.^2;
+      psi_MMS =@(x) 0.001*x.^3;
+      psi_MMS_Diff =@(x) 0.001*3*x.^2;
       % Manufactured TH solution T(x)=sin(pi*x/Tau), 0<x<Tau
       T_MMS =@(x) 100*sin(pi*x/Tau);
       T_MMS_xx =@(x) -100*(pi*pi/Tau/Tau)*sin(pi*x/Tau);
@@ -74,8 +74,8 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
 %       T_MMS_xx =@(x) 0.000000+0.0*x;%1*x*6.0;
 %       T_MMS =@(x) x.^2;
 %       T_MMS_xx =@(x) 2.0+x*0.0;
-%       T_MMS =@(x) 0.1*x.^3;
-%       T_MMS_xx =@(x) 0.1*x*6.0;
+      T_MMS =@(x) 0.1*x.^3;
+      T_MMS_xx =@(x) 0.1*x*6.0;
     case('sqrtPlus1_quadratic')
       % Manufactured neutronics solution \psi(x,\mu)=1.0, 0<x<Tau
       psi_MMS =@(x) sqrt(x+1);
@@ -108,9 +108,9 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
   phi0_MMS =@(x) 2*psi_MMS(x);
   % MMS source: mu_n * derivative(psi_MMS) +Sig_t* psi_MMS ...
   % -(Sig_ss+nuSig_f)*0.5*phi0_MMS;
-  Q_MMS =@(x,mu) mu*psi_MMS_Diff(x) +Sig_t(x).*psi_MMS(x) ...
+  Q_MMS =@(x,mu) mu.*psi_MMS_Diff(x) +Sig_t(x).*psi_MMS(x) ...
     -(Sig_ss(x)+nuSig_f(x))*0.5.*phi0_MMS(x);
-  Q_MMS_1Mnt= @(x,mu) mu*psi_MMS_Diff(x).*x +Sig_t(x).*psi_MMS(x).*x ...
+  Q_MMS_1Mnt= @(x,mu) mu.*psi_MMS_Diff(x).*x +Sig_t(x).*psi_MMS(x).*x ...
     -(Sig_ss(x)+nuSig_f(x))*0.5.*phi0_MMS(x).*x;
   
   %% For MoC MMS solution and problem
