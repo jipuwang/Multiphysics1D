@@ -45,7 +45,7 @@ for iGrid=1:nGrids
     field4,value4,field5,value5,field6,value6,field7,value7);
 
   % Define function handles 
-  if strcmp(mocSrc,'linear_source')
+  if strcmp(mocSrc,'linear-source')
     % call the manufacturer to get MMS problem and solution
     [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n, ...
           T_j_ana,T_L,T_R,p_MMS_j]=...

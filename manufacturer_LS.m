@@ -28,7 +28,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
       field4,value4,field5,value5,field6,value6,field7,value7);
   end
   if ~exist('assumedSoln','var')
-    assumedSoln='sqrtPlus1_quadratic';
+    assumedSoln='sqrtPlus1-quadratic';
   end
   if ~exist('fbType','var')
     fbType='linear';
@@ -50,16 +50,16 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
   %% Manufactured Solutions for both fields
   % They need to be pre-defined here due to temperature dependence on the
   % xs. 
-  % Options includes: sine_sine, const_cubic, sqrtPlus1_quadratic, etc.
+  % Options includes: sine-sine, const-cubic, sqrtPlus1-quadratic, etc.
   switch(assumedSoln)
-    case('const_cubic')
+    case('const-cubic')
       % Manufactured neutronics solution \psi(x,\mu)=1.0, 0<x<Tau
       psi_MMS =@(x) 1.0+x*0.0;
       psi_MMS_Diff =@(x) x*0.0;
       % Manufactured TH solution T(x)=x.^3, 0<x<Tau
       T_MMS =@(x) 0.1*x.^3;
       T_MMS_xx =@(x) 0.1*x*6.0;
-    case('sine_sine')
+    case('sine-sine')
       % Manufactured neutronics solution \psi(x,\mu)=sin(pi*x/Tau), 0<x<Tau
       psi_MMS =@(x) sin(pi*x/Tau);
       psi_MMS_Diff =@(x) pi/Tau*cos(pi*x/Tau);
@@ -76,7 +76,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
 %       T_MMS_xx =@(x) 2.0+x*0.0;
       T_MMS =@(x) 0.1*x.^3;
       T_MMS_xx =@(x) 0.1*x*6.0;
-    case('sqrtPlus1_quadratic')
+    case('sqrtPlus1-quadratic')
       % Manufactured neutronics solution \psi(x,\mu)=1.0, 0<x<Tau
       psi_MMS =@(x) sqrt(x+1);
       psi_MMS_Diff =@(x) 0.5./sqrt(x+1);
