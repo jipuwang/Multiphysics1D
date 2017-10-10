@@ -58,8 +58,8 @@ function [phi0_j,T_j]=...
   end
 
   % Start the Picard Iteration
-  T_j_old=zeros(J,1);
-  phi0_j_old=zeros(1,J);
+  T_old_j=zeros(J,1);
+  phi0_old_j=zeros(J,1);
   isConverged=false;
   % save the capture xs before the correction.
   Sig_gamma_ref_j=mat.Sig_gamma_j;
@@ -68,8 +68,8 @@ function [phi0_j,T_j]=...
     phi0_j=MoC_LS_module(J,N,Tau,mat,...
              psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n);
 %     phi0_j=phi0_j_ana;
-    error_phi=norm(phi0_j-phi0_j_old)/sqrt(J);
-    phi0_j_old=phi0_j;
+    error_phi=norm(phi0_j-phi0_old_j)/sqrt(J);
+    phi0_old_j=phi0_j;
 
     %% The coupling
     % Build the heat source for TH
@@ -78,8 +78,8 @@ function [phi0_j,T_j]=...
     %% Call the heat conduction module to get the temperature
     T_j=heat_cond_module(J,Tau,mat,T_L,T_R,pTriplePrime_j,p_MMS_j);
 %     T_j=T_j_ana;
-    error_T=norm(T_j-T_j_old)/sqrt(J);
-    T_j_old=T_j;
+    error_T=norm(T_j-T_old_j)/sqrt(J);
+    T_old_j=T_j;
 
     %% check convergence
     if (error_phi<1e-12 && error_T<1e-12)
@@ -87,7 +87,7 @@ function [phi0_j,T_j]=...
     end
     
     %% update cross section
-    switch fbType
+    switch char(fbType)
       case 'noFeedback'
         break;
       case 'linear'
