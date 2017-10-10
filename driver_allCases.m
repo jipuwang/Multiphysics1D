@@ -14,7 +14,7 @@ A={'flat-source','linear-source'};
 mocSrcS=string(A);
 A={'const-cubic','sine-sine','sqrtPlus1-quadratic'};
 assumedSolnS=string(A);
-% I have not yet figured out how to rewrite it so R2016 will alow it.
+% I have not yet figured out how to rewrite it so R2016 will allow it.
 
 % Store the order of accuracy, it could have just been a constant
 nCombinations=size(fbTypeS,2)*size(mocSrcS,2)*size(assumedSolnS,2);
