@@ -51,7 +51,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
   % They need to be pre-defined here due to temperature dependence on the
   % xs. 
   % Options includes: sine-sine, const-cubic, sqrtPlus1-quadratic, etc.
-  switch(assumedSoln)
+  switch(char(assumedSoln))
     case('const-cubic')
       % Manufactured neutronics solution \psi(x,\mu)=1.0, 0<x<Tau
       psi_MMS =@(x) 1.0+x*0.0;
@@ -87,7 +87,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
   
   %% XS update due to temperature feedback!
   % Change in capture is reflected in change in total. 
-  switch fbType
+  switch char(fbType)
     case 'noFeedback'
       Sig_gamma =@(x) mat.Sig_gamma_j(1)+0.0*x;
     case 'linear'
