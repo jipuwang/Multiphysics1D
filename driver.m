@@ -3,14 +3,18 @@
 % fbType options: 'noFeedback','linear','squareRootPlus1'
 % assumedSoln options: 'const-cubic','sine-sine','sqrtPlus1-quadratic'
 % mocSrc options: 'flat-source','linear-source'
-delete diary.txt;
+% if exist('diary.txt', 'file') == 2 
+%   delete diary.txt;
+% end
 diary('diary.txt')
-A={'noFeedback','linear','squareRootPlus1'};bTypeS=string(A);
+% The following is only allowd for MATLAB 2017
+A={'noFeedback','linear','squareRootPlus1'};
+fbTypeS=string(A);
 A={'flat-source','linear-source'};
 mocSrcS=string(A);
 A={'const-cubic','sine-sine','sqrtPlus1-quadratic'};
 assumedSolnS=string(A);
-
+% I have not yet figured out how to rewrite it so R2016 will alow it.
 
 % Store the order of accuracy, it could have just been a constant
 nCombinations=size(fbTypeS,2)*size(mocSrcS,2)*size(assumedSolnS,2);
