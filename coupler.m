@@ -81,7 +81,6 @@ function [phi0_j,T_j]=...
 
     %% check convergence
     if (error_phi<1e-12 && error_T<1e-12)
-      isConverged=true;
       break;
     end
     
