@@ -109,7 +109,7 @@ end
 %% Visualize the results
 orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
 
-scalarFluxErrorRMS_plot_handle=figure(11);
+scalarFluxErrorRMS_plot_handle=figure;
 loglog(gridMeshSize_n,error_phi0_n,'*');
 title({'scalar flux error convergence',[assumedSoln ' case']});
 xlabel('mesh size [cm]');
@@ -130,7 +130,7 @@ legend('scalar flux error','1st Order','2nd Order',...
   '3rd Order','4th Order','location','best');
 hold off;
 
-temperatureErrorRM_plot_handle=figure(12);
+temperatureErrorRM_plot_handle=figure;
 loglog(gridMeshSize_n,error_T_n,'*');
 title({'temperature error convergence',[assumedSoln ' case']});
 xlabel('mesh size [cm]');
@@ -152,13 +152,13 @@ legend('temperature error','1st Order','2nd Order',...
 hold off;
 
 % Plot the solution
-scalarFlux_plot_handle=figure(13);
+scalarFlux_plot_handle=figure;
 plot(phi0_j,'-*');
 % title('scalar flux');
 xlabel('mesh size [cm]');
 ylabel('scalar flux');
 
-temperature_plot_handle=figure(14);
+temperature_plot_handle=figure;
 plot(T_j,'-o');
 % title('temperature');
 xlabel('mesh size [cm]');
