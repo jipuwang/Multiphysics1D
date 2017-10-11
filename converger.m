@@ -70,29 +70,9 @@ for iGrid=1:nGrids
                 T_L,T_R,p_MMS_j,fbType);
   end
 
-  
   % Calculate the error compared to manufactured solution
   error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana,2)/sqrt(J);
   error_T_n(iGrid)=norm(T_j-T_j_ana,2)/sqrt(J);
-  
-%   %% Plot the solution over grid refinements
-%   x=linspace(0,10,J);
-%   figure(67); clf; hold on;
-%   if iGrid==1
-%     % title('scalar flux');
-%     xlabel('mesh size [cm]');
-%     ylabel('scalar flux');
-%   end
-%   % Plot the solution
-%   plot(x,phi0_j,'-*');
-%   
-%   figure(68); clf; hold on;
-%   if iGrid==1
-%     % title('temperature');
-%     xlabel('mesh size [cm]');
-%     ylabel('temperature');
-%   end
-%   plot(x,T_j,'-o');
 
 end
 
@@ -111,7 +91,8 @@ orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
 
 scalarFluxErrorRMS_plot_handle=figure;
 loglog(gridMeshSize_n,error_phi0_n,'*');
-title({'scalar flux error convergence',[assumedSoln ' case']});
+% title({'scalar flux error convergence',[assumedSoln ' case']});
+title([fbType '\_' mocSrc '\_' assumedSoln])
 xlabel('mesh size [cm]');
 ylabel('scalar flux error RMS');
 
@@ -127,12 +108,13 @@ loglog(orderPlotGrid,secondOrder,'g--');
 loglog(orderPlotGrid,thirdOrder,'b--');
 loglog(orderPlotGrid,fourthOrder,'k--');
 legend('scalar flux error','1st Order','2nd Order',...
-  '3rd Order','4th Order','location','best');
+  '3rd Order','4th Order','location','southeast');
 hold off;
 
 temperatureErrorRM_plot_handle=figure;
 loglog(gridMeshSize_n,error_T_n,'*');
-title({'temperature error convergence',[assumedSoln ' case']});
+% title({'temperature error convergence',[assumedSoln ' case']});
+title([fbType '\_' mocSrc '\_' assumedSoln])
 xlabel('mesh size [cm]');
 ylabel('temperature error RMS');
 
@@ -148,19 +130,19 @@ loglog(orderPlotGrid,secondOrder,'g--');
 loglog(orderPlotGrid,thirdOrder,'b--');
 loglog(orderPlotGrid,fourthOrder,'k--');
 legend('temperature error','1st Order','2nd Order',...
-  '3rd Order','4th Order','location','best');
+  '3rd Order','4th Order','location','southeast');
 hold off;
 
 % Plot the solution
 scalarFlux_plot_handle=figure;
 plot(phi0_j,'-*');
-% title('scalar flux');
+title('scalar flux');
 xlabel('mesh size [cm]');
 ylabel('scalar flux');
 
 temperature_plot_handle=figure;
 plot(T_j,'-o');
-% title('temperature');
+title('temperature');
 xlabel('mesh size [cm]');
 ylabel('temperature');
 
