@@ -59,7 +59,7 @@ function [phi0_j,T_j]=...
 
   % Start the Picard Iteration
   T_j_old=zeros(J,1);
-  phi0_j_old=zeros(1,J);
+  phi0_old_j=zeros(J,1);
   isConverged=false;
   % save the capture xs before the correction.
   Sig_gamma_ref_j=mat.Sig_gamma_j;
@@ -67,8 +67,8 @@ function [phi0_j,T_j]=...
     %% Call the MoC module to get the flux
     phi0_j=MoC_module(J,N,Tau,mat,...
              psi_b1_n,psi_b2_n,Q_MMS_j_n);
-    error_phi=norm(phi0_j-phi0_j_old)/sqrt(J);
-    phi0_j_old=phi0_j;
+    error_phi=norm(phi0_j-phi0_old_j)/sqrt(J);
+    phi0_old_j=phi0_j;
 
     %% The coupling
     % Build the heat source for TH
